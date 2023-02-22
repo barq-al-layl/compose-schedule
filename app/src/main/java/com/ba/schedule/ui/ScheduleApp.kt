@@ -39,7 +39,7 @@ fun ScheduleApp() {
         NavHost(
             navController = appState.navController,
             startDestination = MainDestination.Home,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(innerPadding),
         ) {
             homeSectionNavGraph(appState::navigateToCourseSelect)
             composable(

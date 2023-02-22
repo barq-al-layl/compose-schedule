@@ -2,7 +2,7 @@ package com.ba.schedule.ui.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import androidx.navigation.navigation
+import androidx.navigation.compose.navigation
 import com.ba.schedule.ui.feature.courses.CoursesScreen
 import com.ba.schedule.ui.feature.events.EventsScreen
 import com.ba.schedule.ui.feature.lectures.LecturesScreen

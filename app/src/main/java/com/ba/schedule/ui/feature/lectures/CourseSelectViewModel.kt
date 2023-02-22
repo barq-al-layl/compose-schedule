@@ -9,8 +9,7 @@ import com.ba.schedule.domain.repository.CoursesRepository
 import com.ba.schedule.domain.repository.LecturesRepository
 import com.ba.schedule.ui.navigation.MainDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,6 +26,9 @@ class CourseSelectViewModel @Inject constructor(
         initialValue = emptyList(),
     )
 
+    private val _selectedItem = MutableStateFlow<Course?>(null)
+    val selectedCourse = _selectedItem.asStateFlow()
+
     private val day: Int
     private val time: Int
 
@@ -35,9 +37,22 @@ class CourseSelectViewModel @Inject constructor(
         time = savedStateHandle[MainDestination.kTime]!!
     }
 
-    fun onAddLecture(course: Course) {
+    fun onItemSelect(item: Course) {
+        _selectedItem.update {
+            if (it != item) item
+            else null
+        }
+    }
+
+    fun onAddLecture() {
         viewModelScope.launch {
-            lecturesRepository.add(Lecture(day, time, course))
+            lecturesRepository.add(
+                Lecture(
+                    day = day,
+                    time = time,
+                    course = selectedCourse.value ?: return@launch,
+                )
+            )
         }
     }
 }
