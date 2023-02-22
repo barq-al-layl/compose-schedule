@@ -8,7 +8,9 @@ import com.ba.schedule.ui.feature.events.EventsScreen
 import com.ba.schedule.ui.feature.lectures.LecturesScreen
 import com.ba.schedule.ui.feature.settings.SettingsScreen
 
-fun NavGraphBuilder.homeSectionNavGraph(navigateToCourseSelect: (Int, Int) -> Unit) {
+fun NavGraphBuilder.homeSectionNavGraph(
+    navigateToCourseSelect: (Int, Int) -> Unit,
+) {
     navigation(
         route = MainDestination.Home,
         startDestination = HomeSection.Lectures.route,

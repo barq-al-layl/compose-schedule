@@ -33,7 +33,6 @@ fun CourseSelectScreen(
     val cardWith = LocalConfiguration.current.screenWidthDp.dp
 
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.tertiaryContainer,
         topBar = {
             TopAppBar(
                 title = {

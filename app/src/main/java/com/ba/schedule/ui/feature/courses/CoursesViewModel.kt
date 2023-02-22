@@ -3,7 +3,9 @@ package com.ba.schedule.ui.feature.courses
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ba.schedule.domain.model.Course
-import com.ba.schedule.domain.repository.CoursesRepository
+import com.ba.schedule.domain.usecase.courses.*
+import com.ba.schedule.domain.util.Resource
+import com.ba.schedule.domain.util.data
 import com.ba.schedule.ui.util.SnackbarAction
 import com.ba.schedule.ui.util.SnackbarMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,7 +15,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CoursesViewModel @Inject constructor(
-    private val repository: CoursesRepository,
+    getCoursesUseCase: GetCoursesUseCase,
+    private val addCourseUseCase: AddCourseUseCase,
+    private val deleteCourseUseCase: DeleteCourseUseCase,
 ) : ViewModel() {
 
     private val _showSearch = MutableStateFlow(false)
@@ -25,15 +29,18 @@ class CoursesViewModel @Inject constructor(
     private val _expandedItem = MutableStateFlow(-1)
     val expandedItem = _expandedItem.asStateFlow()
 
-    val courses = repository.getAll().onEach {
-        _expandedItem.update { -1 }
-    }.combine(searchString) { courses, substring ->
-        courses.filter { it.name.contains(substring, ignoreCase = true) }
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Eagerly,
-        initialValue = emptyList(),
-    )
+    val courses = getCoursesUseCase(Unit)
+        .filter { it is Resource.Success }
+        .mapNotNull { it.data }
+        .onEach {
+            _expandedItem.update { -1 }
+        }.combine(searchString) { courses, substring ->
+            courses.filter { it.name.contains(substring, ignoreCase = true) }
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = emptyList(),
+        )
 
     private val _showDialog = MutableStateFlow(false)
     val showDialog = _showDialog.asStateFlow()
@@ -73,7 +80,7 @@ class CoursesViewModel @Inject constructor(
                 id = selectedCourse.value?.id,
                 name = courseName,
             )
-            repository.add(course)
+            addCourseUseCase(AddCourseParameter(course))
             _dialogValue.update { "" }
             onShowDialogChange()
         }
@@ -82,13 +89,15 @@ class CoursesViewModel @Inject constructor(
     fun onDeleteCourse(course: Course) {
         viewModelScope.launch {
             lastDeletedCourse = course
-            repository.delete(course)
+            deleteCourseUseCase(DeleteCourseParameter(course))
             _message.emit(
                 SnackbarMessage(
                     message = "Course deleted!",
                     action = SnackbarAction("Restore") {
                         viewModelScope.launch action@{
-                            repository.add(lastDeletedCourse ?: return@action)
+                            addCourseUseCase(
+                                AddCourseParameter(lastDeletedCourse ?: return@action)
+                            )
                             lastDeletedCourse = null
                         }
                     },

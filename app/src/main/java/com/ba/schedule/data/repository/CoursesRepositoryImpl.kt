@@ -11,9 +11,7 @@ class CoursesRepositoryImpl(private val dao: CoursesDao) : CoursesRepository {
 
     override fun getAll(): Flow<List<Course>> {
         return dao.getAll().map { courses ->
-            courses.sortedWith(
-                compareBy({ it.name.length }, { it.name }),
-            ).map { it.toCourse() }
+            courses.map { it.toCourse() }
         }
     }
 
