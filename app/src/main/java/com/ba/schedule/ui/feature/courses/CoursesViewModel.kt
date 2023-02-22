@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ba.schedule.domain.model.Course
 import com.ba.schedule.domain.usecase.courses.*
-import com.ba.schedule.domain.util.Resource
 import com.ba.schedule.domain.util.data
 import com.ba.schedule.ui.util.SnackbarAction
 import com.ba.schedule.ui.util.SnackbarMessage
@@ -30,7 +29,6 @@ class CoursesViewModel @Inject constructor(
     val expandedItem = _expandedItem.asStateFlow()
 
     val courses = getCoursesUseCase(Unit)
-        .filter { it is Resource.Success }
         .mapNotNull { it.data }
         .onEach {
             _expandedItem.update { -1 }

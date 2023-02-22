@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ba.schedule.domain.model.Lecture
 import com.ba.schedule.domain.usecase.lectures.*
-import com.ba.schedule.domain.util.Resource
 import com.ba.schedule.domain.util.data
 import com.ba.schedule.ui.util.SnackbarAction
 import com.ba.schedule.ui.util.SnackbarMessage
@@ -24,7 +23,6 @@ class LecturesViewModel @Inject constructor(
     val isLayoutLocked = _isLayoutLocked.asStateFlow()
 
     val lectures = getLecturesUseCase(Unit)
-        .filter { it is Resource.Success }
         .mapNotNull { it.data }
         .stateIn(
             scope = viewModelScope,

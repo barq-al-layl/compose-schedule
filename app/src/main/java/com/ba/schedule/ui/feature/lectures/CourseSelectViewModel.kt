@@ -8,7 +8,6 @@ import com.ba.schedule.domain.model.Lecture
 import com.ba.schedule.domain.usecase.courses.GetCoursesUseCase
 import com.ba.schedule.domain.usecase.lectures.AddLectureParameter
 import com.ba.schedule.domain.usecase.lectures.AddLectureUseCase
-import com.ba.schedule.domain.util.Resource
 import com.ba.schedule.domain.util.data
 import com.ba.schedule.ui.navigation.MainDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +23,6 @@ class CourseSelectViewModel @Inject constructor(
 ) : ViewModel() {
 
     val courses = getCoursesUseCase(Unit)
-        .filter { it is Resource.Success }
         .mapNotNull { it.data }
         .stateIn(
             scope = viewModelScope,
