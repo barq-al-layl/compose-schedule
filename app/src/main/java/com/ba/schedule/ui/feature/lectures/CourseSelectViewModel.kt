@@ -33,13 +33,8 @@ class CourseSelectViewModel @Inject constructor(
     private val _selectedItem = MutableStateFlow<Course?>(null)
     val selectedCourse = _selectedItem.asStateFlow()
 
-    private val day: Int
-    private val time: Int
-
-    init {
-        day = savedStateHandle[MainDestination.kDay]!!
-        time = savedStateHandle[MainDestination.kTime]!!
-    }
+    private val day: Int = savedStateHandle[MainDestination.kDay]!!
+    private val time: Int = savedStateHandle[MainDestination.kTime]!!
 
     fun onItemSelect(item: Course) {
         _selectedItem.update {
