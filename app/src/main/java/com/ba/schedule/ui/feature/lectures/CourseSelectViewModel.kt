@@ -31,8 +31,8 @@ class CourseSelectViewModel @Inject constructor(
     private val time: Int
 
     init {
-        day = savedStateHandle.get<Int>(MainDestination.kDay)!!
-        time = savedStateHandle.get<Int>(MainDestination.kTime)!!
+        day = savedStateHandle[MainDestination.kDay]!!
+        time = savedStateHandle[MainDestination.kTime]!!
     }
 
     fun onAddLecture(course: Course) {
