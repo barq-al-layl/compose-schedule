@@ -22,7 +22,6 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.ba.schedule.ui.component.AddCourseDialog
 import com.ba.schedule.ui.component.CourseCard
 import com.ba.schedule.ui.viewmodel.CoursesViewModel
 
@@ -36,8 +35,6 @@ fun CoursesScreen(
     val searchValue by viewModel.searchString.collectAsState()
     val courses by viewModel.courses.collectAsState()
     val expandedItem by viewModel.expandedItem.collectAsState()
-    val showDialog by viewModel.showDialog.collectAsState()
-    val dialogValue by viewModel.dialogValue.collectAsState()
 
     val snackbarHosState = remember { SnackbarHostState() }
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp - 32.dp
@@ -139,11 +136,4 @@ fun CoursesScreen(
             }
         }
     }
-    AddCourseDialog(
-        isVisible = showDialog,
-        value = dialogValue,
-        onValueChange = viewModel::onDialogValueChange,
-        onConfirm = viewModel::onAddCourse,
-        onDismiss = viewModel::onShowDialogChange,
-    )
 }

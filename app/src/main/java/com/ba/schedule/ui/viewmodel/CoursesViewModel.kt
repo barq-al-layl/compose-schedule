@@ -40,14 +40,6 @@ class CoursesViewModel @Inject constructor(
             initialValue = emptyList(),
         )
 
-    private val _showDialog = MutableStateFlow(false)
-    val showDialog = _showDialog.asStateFlow()
-
-    private val _dialogValue = MutableStateFlow("")
-    val dialogValue = _dialogValue.asStateFlow()
-
-    private val selectedCourse = MutableStateFlow<Course?>(null)
-
     private val _message = MutableSharedFlow<SnackbarMessage>()
     val message = _message.asSharedFlow()
 
@@ -59,29 +51,6 @@ class CoursesViewModel @Inject constructor(
                 _searchString.update { "" }
             }
         }.launchIn(viewModelScope)
-
-        showDialog.onEach { visible ->
-            if (!visible) {
-                selectedCourse.update { null }
-            }
-        }.launchIn(viewModelScope)
-
-        selectedCourse.onEach { course ->
-            _dialogValue.update { course?.name ?: "" }
-        }.launchIn(viewModelScope)
-    }
-
-    fun onAddCourse() {
-        viewModelScope.launch {
-            val courseName = dialogValue.value.trim()
-            val course = Course(
-                id = selectedCourse.value?.id,
-                name = courseName,
-            )
-            addCourseUseCase(AddCourseParameter(course))
-            _dialogValue.update { "" }
-            onShowDialogChange()
-        }
     }
 
     fun onDeleteCourse(course: Course) {
@@ -108,20 +77,6 @@ class CoursesViewModel @Inject constructor(
         _expandedItem.update {
             if (it == id) -1 else id
         }
-    }
-
-    fun onDialogValueChange(value: String) {
-        _dialogValue.update { value }
-    }
-
-    fun onEditCourse(course: Course) {
-        selectedCourse.update { course }
-        _dialogValue.update { course.name }
-        onShowDialogChange()
-    }
-
-    fun onShowDialogChange() {
-        _showDialog.update { !it }
     }
 
     fun onSearchValueChange(value: String) {

@@ -16,6 +16,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.ba.schedule.ui.component.AddCourseTextField
 import com.ba.schedule.ui.viewmodel.AddCourseViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -25,6 +26,8 @@ fun AddCourseScreen(
     navigateBack: () -> Unit,
 ) {
     val courseName by viewModel.courseName.collectAsState()
+    val final by viewModel.final.collectAsState()
+    val midterm by viewModel.midterm.collectAsState()
 
     Scaffold(
         topBar = {
@@ -83,31 +86,15 @@ fun AddCourseScreen(
                 keyboardActions = KeyboardActions(onNext = {}),
                 shape = MaterialTheme.shapes.large,
             )
-            OutlinedTextField(
-                value = courseName,
-                onValueChange = viewModel::onNameChange,
-                modifier = Modifier.fillMaxWidth(),
-                textStyle = TextStyle(fontSize = 18.sp),
-                label = { Text(text = "Course Name") },
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.Words,
-                    imeAction = ImeAction.Next,
-                ),
-                keyboardActions = KeyboardActions(onNext = {}),
-                shape = MaterialTheme.shapes.large,
+            AddCourseTextField(
+                label = "Final",
+                state = final,
+                onEvent = viewModel::onFinalChange,
             )
-            OutlinedTextField(
-                value = courseName,
-                onValueChange = viewModel::onNameChange,
-                modifier = Modifier.fillMaxWidth(),
-                textStyle = TextStyle(fontSize = 18.sp),
-                label = { Text(text = "Course Name") },
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.Words,
-                    imeAction = ImeAction.Next,
-                ),
-                keyboardActions = KeyboardActions(onNext = {}),
-                shape = MaterialTheme.shapes.large,
+            AddCourseTextField(
+                label = "Midterm",
+                state = midterm,
+                onEvent = viewModel::onMidtermChange,
             )
         }
     }

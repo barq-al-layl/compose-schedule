@@ -1,6 +1,10 @@
 package com.ba.schedule.ui.feature.lectures
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
@@ -9,6 +13,7 @@ import androidx.compose.material.icons.rounded.LockOpen
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -25,6 +30,7 @@ fun LecturesScreen(
 ) {
 
     val snackbarHostState = remember { SnackbarHostState() }
+
 
     LaunchedEffect(Unit) {
         viewModel.message.collect {
@@ -56,6 +62,11 @@ fun LecturesScreen(
         else MaterialTheme.colorScheme.primary,
     )
 
+    val lockAngel by animateFloatAsState(
+        targetValue = if (isLocked) 360f else 0f,
+        animationSpec = tween(easing = FastOutSlowInEasing),
+    )
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -72,7 +83,8 @@ fun LecturesScreen(
                             tint = lockColor,
                             modifier = Modifier
                                 .size(38.dp)
-                                .padding(4.dp),
+                                .padding(4.dp)
+                                .rotate(lockAngel),
                         )
                     }
                 }
