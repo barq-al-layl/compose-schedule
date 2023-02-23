@@ -15,6 +15,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ba.schedule.domain.util.Period
 import com.ba.schedule.domain.util.WeekDay
 import com.ba.schedule.ui.component.TableCell
+import com.ba.schedule.ui.viewmodel.LecturesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

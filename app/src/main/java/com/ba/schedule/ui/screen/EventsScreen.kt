@@ -1,4 +1,4 @@
-package com.ba.schedule.ui.feature.events
+package com.ba.schedule.ui.screen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

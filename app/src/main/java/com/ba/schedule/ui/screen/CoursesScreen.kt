@@ -1,4 +1,4 @@
-package com.ba.schedule.ui.feature.courses
+package com.ba.schedule.ui.screen
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ba.schedule.ui.component.AddCourseDialog
 import com.ba.schedule.ui.component.CourseCard
+import com.ba.schedule.ui.viewmodel.CoursesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

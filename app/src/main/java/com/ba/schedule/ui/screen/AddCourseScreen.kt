@@ -1,4 +1,4 @@
-package com.ba.schedule.ui.feature.courses
+package com.ba.schedule.ui.screen
 
 import androidx.compose.runtime.Composable
 

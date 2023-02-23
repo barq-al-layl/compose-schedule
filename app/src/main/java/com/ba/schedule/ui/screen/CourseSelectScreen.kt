@@ -1,4 +1,4 @@
-package com.ba.schedule.ui.feature.lectures
+package com.ba.schedule.ui.screen
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.ba.schedule.ui.viewmodel.CourseSelectViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
