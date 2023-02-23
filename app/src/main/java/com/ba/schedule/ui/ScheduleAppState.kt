@@ -47,6 +47,10 @@ class ScheduleAppState(
         navController.navigate("${MainDestination.SelectCourse}/$day/$time")
     }
 
+    fun navigateToAddCourse(id: Int) {
+        navController.navigate("${MainDestination.AddCourse}/$id")
+    }
+
     fun upPress() {
         navController.navigateUp()
     }

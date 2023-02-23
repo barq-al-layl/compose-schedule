@@ -13,9 +13,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.ba.schedule.ui.component.ScheduleBottomBar
-import com.ba.schedule.ui.screen.CourseSelectScreen
 import com.ba.schedule.ui.navigation.MainDestination
 import com.ba.schedule.ui.navigation.homeSectionNavGraph
+import com.ba.schedule.ui.screen.AddCourseScreen
+import com.ba.schedule.ui.screen.CourseSelectScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,7 +42,7 @@ fun ScheduleApp() {
             startDestination = MainDestination.Home,
             modifier = Modifier.padding(innerPadding),
         ) {
-            homeSectionNavGraph(appState::navigateToCourseSelect)
+            homeSectionNavGraph(appState)
             composable(
                 route = "${MainDestination.SelectCourse}/{${MainDestination.kDay}}/{${MainDestination.kTime}}",
                 arguments = listOf(
@@ -54,6 +55,17 @@ fun ScheduleApp() {
                 ),
             ) {
                 CourseSelectScreen(navigateBack = appState::upPress)
+            }
+            composable(
+                route = "${MainDestination.AddCourse}/{${MainDestination.kCourseId}}",
+                arguments = listOf(
+                    navArgument(MainDestination.kCourseId) {
+                        type = NavType.IntType
+                        defaultValue = -1
+                    },
+                ),
+            ) {
+                AddCourseScreen(navigateBack = appState::upPress)
             }
         }
     }

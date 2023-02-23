@@ -30,6 +30,7 @@ import com.ba.schedule.ui.viewmodel.CoursesViewModel
 @Composable
 fun CoursesScreen(
     viewModel: CoursesViewModel = hiltViewModel(),
+    navigateToAddCourse: (Int) -> Unit,
 ) {
     val showSearch by viewModel.showSearch.collectAsState()
     val searchValue by viewModel.searchString.collectAsState()
@@ -104,7 +105,7 @@ fun CoursesScreen(
             SnackbarHost(hostState = snackbarHosState)
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = viewModel::onShowDialogChange) {
+            FloatingActionButton(onClick = { navigateToAddCourse(-1) }) {
                 Icon(
                     imageVector = Icons.Rounded.Add,
                     contentDescription = null,
@@ -132,7 +133,7 @@ fun CoursesScreen(
                     width = screenWidth,
                     expanded = expandedItem == it.id,
                     onClick = { viewModel.onExpandItem(it.id!!) },
-                    onEdit = { viewModel.onEditCourse(it) },
+                    onEdit = { navigateToAddCourse(it.id!!) },
                     onDelete = { viewModel.onDeleteCourse(it) },
                 )
             }

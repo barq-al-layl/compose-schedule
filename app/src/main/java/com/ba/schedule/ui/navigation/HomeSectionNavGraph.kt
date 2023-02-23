@@ -3,13 +3,14 @@ package com.ba.schedule.ui.navigation
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import com.ba.schedule.ui.ScheduleAppState
 import com.ba.schedule.ui.screen.CoursesScreen
 import com.ba.schedule.ui.screen.EventsScreen
 import com.ba.schedule.ui.feature.lectures.LecturesScreen
 import com.ba.schedule.ui.screen.SettingsScreen
 
 fun NavGraphBuilder.homeSectionNavGraph(
-    navigateToCourseSelect: (Int, Int) -> Unit,
+    appState: ScheduleAppState,
 ) {
     navigation(
         route = MainDestination.Home,
@@ -18,12 +19,12 @@ fun NavGraphBuilder.homeSectionNavGraph(
         composable(
             route = HomeSection.Lectures.route,
         ) {
-            LecturesScreen(onLectureClick = navigateToCourseSelect)
+            LecturesScreen(onLectureClick = appState::navigateToCourseSelect)
         }
         composable(
             route = HomeSection.Courses.route,
         ) {
-            CoursesScreen()
+            CoursesScreen(navigateToAddCourse = appState::navigateToAddCourse)
         }
         composable(
             route = HomeSection.Events.route,
