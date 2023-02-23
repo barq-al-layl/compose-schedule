@@ -4,9 +4,9 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.ba.schedule.ui.ScheduleAppState
+import com.ba.schedule.ui.feature.lectures.LecturesScreen
 import com.ba.schedule.ui.screen.CoursesScreen
 import com.ba.schedule.ui.screen.EventsScreen
-import com.ba.schedule.ui.feature.lectures.LecturesScreen
 import com.ba.schedule.ui.screen.SettingsScreen
 
 fun NavGraphBuilder.homeSectionNavGraph(

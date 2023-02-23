@@ -2,8 +2,10 @@ package com.ba.schedule.ui.component
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material3.*
@@ -19,8 +21,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.ba.schedule.ui.util.AddCourseTextFieldEvent
-import com.ba.schedule.ui.util.AddCourseTextFieldState
+import com.ba.schedule.domain.model.AddCourseTextFieldEvent
+import com.ba.schedule.domain.model.AddCourseTextFieldState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,7 +41,9 @@ fun AddCourseTextField(
                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = .55f),
                 shape = MaterialTheme.shapes.large,
             )
-            .padding(16.dp),
+            .padding(16.dp)
+            .imePadding()
+            .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Text(
@@ -104,6 +108,7 @@ fun AddCourseTextField(
             )
         }
         Row(
+            modifier = Modifier.height(IntrinsicSize.Max),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -116,7 +121,7 @@ fun AddCourseTextField(
                     fontWeight = FontWeight.W500,
                     textAlign = TextAlign.Center
                 ),
-                label = { Text(text = "HOUR") },
+                label = { Text(text = "HOUR", fontSize = 14.sp) },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Next,
@@ -133,7 +138,7 @@ fun AddCourseTextField(
                 onValueChange = { onEvent(AddCourseTextFieldEvent.MinuteChange(it)) },
                 modifier = Modifier.weight(2f),
                 textStyle = TextStyle(fontSize = 18.sp, textAlign = TextAlign.Center),
-                label = { Text(text = "MINUTE") },
+                label = { Text(text = "MINUTE", fontSize = 14.sp) },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Done,
@@ -148,14 +153,18 @@ fun AddCourseTextField(
             FilledIconButton(
                 onClick = { onEvent(AddCourseTextFieldEvent.Reset) },
                 modifier = Modifier
+                    .fillMaxHeight()
                     .weight(1f)
-                    .aspectRatio(1f),
+                    .padding(vertical = 6.dp),
                 shape = MaterialTheme.shapes.large,
                 colors = IconButtonDefaults.filledIconButtonColors(
-                    containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
                 ),
             ) {
-                Icon(imageVector = Icons.Rounded.Refresh, contentDescription = null)
+                Icon(
+                    imageVector = Icons.Rounded.Refresh,
+                    contentDescription = null,
+                )
             }
         }
     }

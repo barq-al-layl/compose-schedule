@@ -1,4 +1,4 @@
-package com.ba.schedule.domain.util
+package com.ba.schedule.domain.model
 
 enum class WeekDay {
     Saturday,

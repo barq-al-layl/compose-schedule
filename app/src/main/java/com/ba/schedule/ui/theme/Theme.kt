@@ -3,11 +3,9 @@ package com.ba.schedule.ui.theme
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Build
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -20,7 +18,7 @@ private val LightColorScheme = lightColorScheme()
 @SuppressLint("ObsoleteSdkInt")
 @Composable
 fun ScheduleTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean = true,
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit,
 ) {
@@ -36,8 +34,8 @@ fun ScheduleTheme(
     if (!view.isInEditMode) {
         val window = (view.context as Activity).window
         SideEffect {
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
+            window.statusBarColor = colorScheme.background.toArgb()
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
         }
     }
 

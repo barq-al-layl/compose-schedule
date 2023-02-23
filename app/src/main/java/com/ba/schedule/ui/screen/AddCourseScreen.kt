@@ -10,6 +10,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -28,6 +30,8 @@ fun AddCourseScreen(
     val courseName by viewModel.courseName.collectAsState()
     val final by viewModel.final.collectAsState()
     val midterm by viewModel.midterm.collectAsState()
+
+    val focusManager = LocalFocusManager.current
 
     Scaffold(
         topBar = {
@@ -83,7 +87,9 @@ fun AddCourseScreen(
                     capitalization = KeyboardCapitalization.Words,
                     imeAction = ImeAction.Next,
                 ),
-                keyboardActions = KeyboardActions(onNext = {}),
+                keyboardActions = KeyboardActions(
+                    onNext = { focusManager.moveFocus(FocusDirection.Next) },
+                ),
                 shape = MaterialTheme.shapes.large,
             )
             AddCourseTextField(

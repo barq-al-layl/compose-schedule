@@ -80,8 +80,4 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_version"
 
 //    implementation "com.google.accompanist:accompanist-navigation-animation:0.29.1-alpha"
-
-//    def destinations_version = "1.7.33-beta"
-//    implementation "io.github.raamcosta.compose-destinations:animations-core:$destinations_version"
-//    ksp "io.github.raamcosta.compose-destinations:ksp:$destinations_version"
 }

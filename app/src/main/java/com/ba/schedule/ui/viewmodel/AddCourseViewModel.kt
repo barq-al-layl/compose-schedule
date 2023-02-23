@@ -3,6 +3,8 @@ package com.ba.schedule.ui.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ba.schedule.domain.model.AddCourseTextFieldEvent
+import com.ba.schedule.domain.model.AddCourseTextFieldState
 import com.ba.schedule.domain.model.Course
 import com.ba.schedule.domain.usecase.courses.AddCourseParameter
 import com.ba.schedule.domain.usecase.courses.AddCourseUseCase
@@ -10,8 +12,6 @@ import com.ba.schedule.domain.usecase.courses.GetCourseByIdParameter
 import com.ba.schedule.domain.usecase.courses.GetCourseByIdUseCase
 import com.ba.schedule.domain.util.data
 import com.ba.schedule.ui.navigation.MainDestination
-import com.ba.schedule.ui.util.AddCourseTextFieldEvent
-import com.ba.schedule.ui.util.AddCourseTextFieldState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

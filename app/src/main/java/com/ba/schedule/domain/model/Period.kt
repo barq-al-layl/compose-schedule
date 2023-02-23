@@ -1,4 +1,4 @@
-package com.ba.schedule.domain.util
+package com.ba.schedule.domain.model
 
 enum class Period(val label: String) {
     First("8:00 - 10:00"),

@@ -1,7 +1,6 @@
 package com.ba.schedule.ui.feature.lectures
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -17,8 +16,8 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.ba.schedule.domain.util.Period
-import com.ba.schedule.domain.util.WeekDay
+import com.ba.schedule.domain.model.Period
+import com.ba.schedule.domain.model.WeekDay
 import com.ba.schedule.ui.component.TableCell
 import com.ba.schedule.ui.viewmodel.LecturesViewModel
 
