@@ -15,7 +15,7 @@ class GetCoursesUseCase @Inject constructor(
         return repository.getAll().map { courses ->
             Resource.Success(
                 courses.sortedWith(
-                    compareBy({ it.name.length }, { it.name }),
+                    compareBy({ it.name }, { it.name.length }),
                 )
             )
         }

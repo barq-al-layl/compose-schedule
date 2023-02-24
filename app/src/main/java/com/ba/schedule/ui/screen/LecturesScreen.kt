@@ -161,7 +161,7 @@ fun LecturesScreen(
                             containerColor = MaterialTheme.colorScheme.tertiaryContainer,
                         )
                         val scale by animateFloatAsState(
-                            targetValue = if (isRemoveVisible) 1f else .9f,
+                            targetValue = if (isRemoveVisible) .9f else 1f,
                             animationSpec = infiniteRepeatable(
                                 animation = tween(
                                     durationMillis = 400,
