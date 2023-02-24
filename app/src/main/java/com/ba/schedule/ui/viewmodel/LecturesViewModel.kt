@@ -3,10 +3,10 @@ package com.ba.schedule.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ba.schedule.domain.model.Lecture
-import com.ba.schedule.ui.util.SnackbarAction
-import com.ba.schedule.ui.util.SnackbarMessage
 import com.ba.schedule.domain.usecase.lectures.*
 import com.ba.schedule.domain.util.data
+import com.ba.schedule.ui.util.SnackbarAction
+import com.ba.schedule.ui.util.SnackbarMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -33,16 +33,30 @@ class LecturesViewModel @Inject constructor(
     private val _message = MutableSharedFlow<SnackbarMessage>()
     val message = _message.asSharedFlow()
 
-    private var removedLecture: Lecture? = null
+    private val _selectedLectures = MutableStateFlow(listOf<Lecture>())
+    val selectedLectures = _selectedLectures.asStateFlow()
 
-    fun onLayoutLockChange() {
-        _isLayoutLocked.update { !it }
+    val isRemoveVisible = selectedLectures.map { it.isNotEmpty() }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = false,
+    )
+
+    private var removedLecture = emptyList<Lecture>()
+
+    init {
+        isLayoutLocked.onEach {
+            if (it) _selectedLectures.update { emptyList() }
+        }.launchIn(viewModelScope)
     }
 
-    fun onRemoveLecture(lecture: Lecture) {
+    fun onRemoveLecture() {
         viewModelScope.launch {
-            removedLecture = lecture
-            removeLectureUseCase(RemoveLectureParameter(lecture))
+            removedLecture = selectedLectures.value
+            selectedLectures.value.forEach {
+                removeLectureUseCase(RemoveLectureParameter(it))
+            }
+            _selectedLectures.update { emptyList() }
             _message.emit(
                 SnackbarMessage(
                     message = "Lecture removed!",
@@ -50,15 +64,27 @@ class LecturesViewModel @Inject constructor(
                         label = "Undo",
                         perform = {
                             viewModelScope.launch action@{
-                                addLectureUseCase(
-                                    AddLectureParameter(removedLecture ?: return@action)
-                                )
-                                removedLecture = null
+                                removedLecture.forEach {
+                                    addLectureUseCase(AddLectureParameter(it))
+                                }
                             }
                         }
                     ),
                 )
             )
         }
+    }
+
+    fun onSelectLecture(lecture: Lecture?) {
+        _selectedLectures.update {
+            if (it.contains(lecture ?: return))
+                it - lecture
+            else
+                it + lecture
+        }
+    }
+
+    fun onLayoutLockChange() {
+        _isLayoutLocked.update { !it }
     }
 }

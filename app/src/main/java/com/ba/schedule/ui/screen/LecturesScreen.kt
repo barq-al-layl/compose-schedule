@@ -1,19 +1,21 @@
-package com.ba.schedule.ui.feature.lectures
+package com.ba.schedule.ui.screen
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.*
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.LockOpen
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ba.schedule.domain.model.Period
@@ -29,7 +31,6 @@ fun LecturesScreen(
 ) {
 
     val snackbarHostState = remember { SnackbarHostState() }
-
 
     LaunchedEffect(Unit) {
         viewModel.message.collect {
@@ -55,6 +56,9 @@ fun LecturesScreen(
 
     val isLocked by viewModel.isLayoutLocked.collectAsState()
     val lectures by viewModel.lectures.collectAsState()
+    val selectedLectures by viewModel.selectedLectures.collectAsState()
+
+    val isRemoveVisible by viewModel.isRemoveVisible.collectAsState()
 
     val lockColor by animateColorAsState(
         targetValue = if (isLocked) MaterialTheme.colorScheme.error
@@ -62,8 +66,11 @@ fun LecturesScreen(
     )
 
     val lockAngel by animateFloatAsState(
-        targetValue = if (isLocked) 360f else 0f,
-        animationSpec = tween(easing = FastOutSlowInEasing),
+        targetValue = if (isLocked) 0f else 30f,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioHighBouncy,
+            stiffness = Spring.StiffnessLow,
+        ),
     )
 
     Scaffold(
@@ -86,12 +93,12 @@ fun LecturesScreen(
                                 .rotate(lockAngel),
                         )
                     }
-                }
+                },
             )
         },
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
-        }
+        },
     ) { innerPadding ->
         Row(
             modifier = Modifier
@@ -101,13 +108,40 @@ fun LecturesScreen(
             horizontalArrangement = Arrangement.spacedBy(tablePadding),
         ) {
             Column(
-                verticalArrangement = Arrangement.spacedBy(tablePadding),
+                verticalArrangement = Arrangement.spacedBy(tablePadding, Alignment.Bottom),
             ) {
-                Spacer(modifier = Modifier.size(width = cellWidth, height = cellHeight))
+                Box(
+                    modifier = Modifier.size(width = cellWidth, height = cellHeight),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    androidx.compose.animation.AnimatedVisibility(
+                        visible = isRemoveVisible,
+                        enter = slideInHorizontally { -it } + fadeIn(),
+                        exit = slideOutHorizontally { -it } + fadeOut(),
+                    ) {
+                        FilledIconButton(
+                            onClick = viewModel::onRemoveLecture,
+                            shape = MaterialTheme.shapes.large,
+                            colors = IconButtonDefaults.filledIconButtonColors(
+                                containerColor = MaterialTheme.colorScheme.errorContainer.copy(
+                                    alpha = .6f,
+                                ),
+                            ),
+                            modifier = Modifier.fillMaxSize(),
+                        ) {
+                            Icon(
+                                imageVector = Icons.Rounded.Delete,
+                                contentDescription = null,
+                                modifier = Modifier.size(30.dp),
+                            )
+                        }
+                    }
+                }
                 days.forEach { day ->
                     TableCell(
                         modifier = Modifier.size(width = cellWidth, height = cellHeight),
                         content = day.name,
+                        fontWeight = FontWeight.Medium,
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
                     )
                 }
@@ -123,20 +157,32 @@ fun LecturesScreen(
                                 height = cellHeight,
                             ),
                             content = periods[time].label,
+                            fontWeight = FontWeight.Medium,
                             containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                        )
+                        val scale by animateFloatAsState(
+                            targetValue = if (isRemoveVisible) 1f else .9f,
+                            animationSpec = infiniteRepeatable(
+                                animation = tween(
+                                    durationMillis = 400,
+                                    easing = LinearEasing
+                                ),
+                                repeatMode = RepeatMode.Reverse,
+                            ),
                         )
                         repeat(days.count()) { day ->
                             val lecture = lectures.find { day == it.day && time == it.time }
+                            val isSelected = lecture in selectedLectures
                             TableCell(
-                                modifier = Modifier.size(
-                                    width = cellWidth,
-                                    height = cellHeight,
-                                ),
+                                modifier = Modifier
+                                    .size(width = cellWidth, height = cellHeight)
+                                    .scale(if (isSelected) scale else 1f),
                                 content = lecture?.course?.name ?: "",
                                 enabled = !isLocked,
-                            ) {
-                                onLectureClick(day, time)
-                            }
+                                isSelected = isSelected,
+                                onClick = { onLectureClick(day, time) },
+                                onLongClick = { viewModel.onSelectLecture(lecture) },
+                            )
                         }
                     }
                 }
