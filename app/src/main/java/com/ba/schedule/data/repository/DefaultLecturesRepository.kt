@@ -6,8 +6,11 @@ import com.ba.schedule.domain.model.Lecture
 import com.ba.schedule.domain.repository.LecturesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class LecturesRepositoryImpl(private val dao: LecturesDao) : LecturesRepository {
+class DefaultLecturesRepository @Inject constructor(
+    private val dao: LecturesDao,
+) : LecturesRepository {
     override fun getAll(): Flow<List<Lecture>> {
         return dao.getAll().map { value ->
             val lectures = mutableSetOf<Lecture>()

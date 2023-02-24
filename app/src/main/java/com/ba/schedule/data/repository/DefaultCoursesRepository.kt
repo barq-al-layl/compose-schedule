@@ -6,8 +6,11 @@ import com.ba.schedule.domain.model.Course
 import com.ba.schedule.domain.repository.CoursesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class CoursesRepositoryImpl(private val dao: CoursesDao) : CoursesRepository {
+class DefaultCoursesRepository @Inject constructor(
+    private val dao: CoursesDao,
+) : CoursesRepository {
 
     override fun getAll(): Flow<List<Course>> {
         return dao.getAll().map { courses ->

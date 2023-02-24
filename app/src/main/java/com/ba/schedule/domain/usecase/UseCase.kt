@@ -3,8 +3,11 @@ package com.ba.schedule.domain.usecase
 import android.util.Log
 import com.ba.schedule.domain.util.Resource
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 
-abstract class UseCase<in P, R>(private val coroutineDispatcher: CoroutineDispatcher) {
+abstract class UseCase<in P, R>(
+    private val coroutineDispatcher: CoroutineDispatcher = Dispatchers.Default,
+) {
 
     suspend operator fun invoke(parameters: P): Resource<R> {
         return try {
