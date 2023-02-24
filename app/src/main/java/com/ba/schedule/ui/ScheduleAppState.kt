@@ -1,10 +1,14 @@
 package com.ba.schedule.ui
 
+import android.content.res.Resources
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
 import androidx.navigation.NavHostController
@@ -21,10 +25,12 @@ fun rememberScheduleAppState(
     navController: NavHostController = rememberNavController(),
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
+    resources: Resources = resources(),
     snackbarManager: SnackbarManager = SnackbarManager,
 ): ScheduleAppState = remember(
     navController,
     snackbarHostState,
+    resources,
     coroutineScope,
     snackbarManager,
 ) {
@@ -33,12 +39,14 @@ fun rememberScheduleAppState(
         snackbarHostState = snackbarHostState,
         coroutineScope = coroutineScope,
         snackbarManager = snackbarManager,
+        resources = resources,
     )
 }
 
 class ScheduleAppState(
     val navController: NavHostController,
     val snackbarHostState: SnackbarHostState,
+    val resources: Resources,
     coroutineScope: CoroutineScope,
     private val snackbarManager: SnackbarManager,
 ) {
@@ -57,16 +65,16 @@ class ScheduleAppState(
         coroutineScope.launch {
             snackbarManager.messages.collect { currentMessages ->
                 if (currentMessages.isNotEmpty()) {
-                    val message = currentMessages.first()
-                    val res = snackbarHostState.showSnackbar(
-                        message = message.message,
-                        actionLabel = message.action?.label,
-                        withDismissAction = message.dismissible,
+                    val item = currentMessages.first()
+                    val result = snackbarHostState.showSnackbar(
+                        message = resources.getString(item.message),
+                        actionLabel = item.action?.label?.let { resources.getString(it) },
+                        withDismissAction = item.dismissible,
                     )
-                    if (res == SnackbarResult.ActionPerformed) {
-                        message.action?.perform?.invoke()
+                    if (result == SnackbarResult.ActionPerformed) {
+                        item.action!!.perform()
                     }
-                    snackbarManager.setMessageAsShown(message.id)
+                    snackbarManager.setMessageAsShown(item.id)
                 }
             }
         }
@@ -102,4 +110,11 @@ private val NavGraph.startDestination: NavDestination?
 
 private tailrec fun findStartDestination(graph: NavDestination): NavDestination {
     return if (graph is NavGraph) findStartDestination(graph.startDestination!!) else graph
+}
+
+@Composable
+@ReadOnlyComposable
+fun resources(): Resources {
+    LocalConfiguration.current
+    return LocalContext.current.resources
 }

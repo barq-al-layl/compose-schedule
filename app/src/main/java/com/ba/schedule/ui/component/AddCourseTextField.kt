@@ -1,5 +1,6 @@
 package com.ba.schedule.ui.component
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
@@ -12,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -19,13 +21,14 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.ba.schedule.R
 import com.ba.schedule.domain.model.AddCourseTextFieldEvent
 import com.ba.schedule.domain.model.AddCourseTextFieldState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddCourseTextField(
-    label: String,
+    @StringRes label: Int,
     state: AddCourseTextFieldState,
     onEvent: (AddCourseTextFieldEvent) -> Unit,
 ) {
@@ -43,7 +46,7 @@ fun AddCourseTextField(
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Text(
-            text = label,
+            text = stringResource(id = label),
             fontSize = 18.sp,
             fontWeight = FontWeight.W500,
         )
@@ -56,7 +59,7 @@ fun AddCourseTextField(
                 onValueChange = { onEvent(AddCourseTextFieldEvent.DayChange(it)) },
                 modifier = Modifier.weight(2f),
                 textStyle = TextStyle(fontSize = 18.sp, textAlign = TextAlign.Center),
-                label = { Text(text = "DD") },
+                label = { Text(text = stringResource(id = R.string.dd)) },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Next,
@@ -73,7 +76,7 @@ fun AddCourseTextField(
                 onValueChange = { onEvent(AddCourseTextFieldEvent.MonthChange(it)) },
                 modifier = Modifier.weight(2f),
                 textStyle = TextStyle(fontSize = 18.sp, textAlign = TextAlign.Center),
-                label = { Text(text = "MM") },
+                label = { Text(text = stringResource(id = R.string.mm)) },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Next,
@@ -90,7 +93,7 @@ fun AddCourseTextField(
                 onValueChange = { onEvent(AddCourseTextFieldEvent.YearChange(it)) },
                 modifier = Modifier.weight(3f),
                 textStyle = TextStyle(fontSize = 18.sp, textAlign = TextAlign.Center),
-                label = { Text(text = "YYYY") },
+                label = { Text(text = stringResource(id = R.string.yyyy)) },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Next,
@@ -117,7 +120,7 @@ fun AddCourseTextField(
                     fontWeight = FontWeight.W500,
                     textAlign = TextAlign.Center
                 ),
-                label = { Text(text = "HOUR", fontSize = 14.sp) },
+                label = { Text(text = stringResource(id = R.string.hour), fontSize = 14.sp) },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Next,
@@ -134,7 +137,7 @@ fun AddCourseTextField(
                 onValueChange = { onEvent(AddCourseTextFieldEvent.MinuteChange(it)) },
                 modifier = Modifier.weight(2f),
                 textStyle = TextStyle(fontSize = 18.sp, textAlign = TextAlign.Center),
-                label = { Text(text = "MINUTE", fontSize = 14.sp) },
+                label = { Text(text = stringResource(id = R.string.minute), fontSize = 14.sp) },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Done,

@@ -1,5 +1,6 @@
 package com.ba.schedule.ui.viewmodel
 
+import android.os.Build
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -27,7 +28,11 @@ class AddCourseViewModel @Inject constructor(
     private val addCourseUseCase: AddCourseUseCase,
 ) : ViewModel() {
 
-    private val thisYear = LocalDate.now().year
+    private val thisYear = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        LocalDate.now().year
+    } else {
+        2023
+    }
 
     private val _courseName = MutableStateFlow("")
     val courseName = _courseName.asStateFlow()

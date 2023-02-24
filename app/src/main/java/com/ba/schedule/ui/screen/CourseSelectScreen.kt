@@ -17,11 +17,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.ba.schedule.R
 import com.ba.schedule.ui.viewmodel.CourseSelectViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,7 +41,7 @@ fun CourseSelectScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = "Select Course",
+                        text = stringResource(id = R.string.select_course),
                         fontSize = 22.sp,
                         fontWeight = FontWeight.W500,
                     )
@@ -92,7 +94,9 @@ fun CourseSelectScreen(
                             viewModel.onAddLecture()
                             navigateBack()
                         },
-                        modifier = Modifier.weight(1f).fillMaxHeight(),
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight(),
                         colors = IconButtonDefaults.filledIconButtonColors(
                             containerColor = MaterialTheme.colorScheme.tertiaryContainer,
                         ),

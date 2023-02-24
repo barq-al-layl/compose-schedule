@@ -1,6 +1,8 @@
 package com.ba.schedule.domain.model
 
+import androidx.annotation.StringRes
+
 data class SnackbarAction(
-    val label: String,
+    @StringRes val label: Int,
     val perform: () -> Unit,
 )

@@ -15,9 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.ba.schedule.R
 import com.ba.schedule.domain.model.Period
 import com.ba.schedule.domain.model.WeekDay
 import com.ba.schedule.ui.component.TableCell
@@ -73,7 +75,7 @@ fun LecturesScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Lectures") },
+                title = { Text(text = stringResource(id = R.string.lectures)) },
                 actions = {
                     IconButton(
                         onClick = viewModel::onLayoutLockChange,

@@ -3,6 +3,7 @@ package com.ba.schedule.ui.screen
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -17,15 +18,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.ba.schedule.R
 import com.ba.schedule.ui.component.CourseCard
 import com.ba.schedule.ui.viewmodel.CoursesViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun CoursesScreen(
     viewModel: CoursesViewModel = hiltViewModel(),
@@ -41,7 +44,7 @@ fun CoursesScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Courses") },
+                title = { Text(text = stringResource(id = R.string.courses)) },
                 actions = {
                     IconButton(onClick = viewModel::onShowSearchChange) {
                         Icon(
@@ -66,7 +69,7 @@ fun CoursesScreen(
                         .height(64.dp)
                         .fillMaxWidth(),
                     singleLine = true,
-                    placeholder = { Text(text = "Type something...") },
+                    placeholder = { Text(text = stringResource(id = R.string.search)) },
                     trailingIcon = {
                         IconButton(onClick = viewModel::onShowSearchChange) {
                             Icon(
@@ -115,6 +118,7 @@ fun CoursesScreen(
                     onClick = { viewModel.onExpandItem(it.id!!) },
                     onEdit = { navigateToAddCourse(it.id!!) },
                     onDelete = { viewModel.onDeleteCourse(it) },
+                    modifier = Modifier.animateItemPlacement()
                 )
             }
         }

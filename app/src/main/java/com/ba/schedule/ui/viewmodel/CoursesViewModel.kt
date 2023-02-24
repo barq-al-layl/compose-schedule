@@ -2,6 +2,7 @@ package com.ba.schedule.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ba.schedule.R
 import com.ba.schedule.domain.model.Course
 import com.ba.schedule.domain.model.SnackbarAction
 import com.ba.schedule.domain.model.SnackbarManager
@@ -42,7 +43,7 @@ class CoursesViewModel @Inject constructor(
             initialValue = emptyList(),
         )
 
-    private var lastDeletedCourse: Course? = null
+    private val deletedCourse = mutableListOf<Course>()
 
     init {
         showSearch.onEach { visible ->
@@ -54,16 +55,15 @@ class CoursesViewModel @Inject constructor(
 
     fun onDeleteCourse(course: Course) {
         viewModelScope.launch {
-            lastDeletedCourse = course
+            deletedCourse += course
             deleteCourseUseCase(DeleteCourseParameter(course))
             val message = SnackbarMessage(
-                message = "Course deleted!",
-                action = SnackbarAction("Restore") {
-                    viewModelScope.launch action@{
+                message = R.string.course_deleted,
+                action = SnackbarAction(R.string.undo) {
+                    viewModelScope.launch {
                         addCourseUseCase(
-                            AddCourseParameter(lastDeletedCourse ?: return@action)
+                            AddCourseParameter(deletedCourse.removeFirst())
                         )
-                        lastDeletedCourse = null
                     }
                 },
             )

@@ -1,3 +1,36 @@
 <resources>
     <string name="app_name">Schedule</string>
+
+    <string name="lectures">Lectures</string>
+    <string name="courses">Courses</string>
+    <string name="events">Events</string>
+    <string name="settings">Settings</string>
+
+    <string-array name="days">
+        <item>Saturday</item>
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+    </string-array>
+
+    <string name="select_course">Select Course</string>
+    <string name="search">Search</string>
+    <string name="add_course">Add Course</string>
+    <string name="course_name">Course Name</string>
+    <string name="midterm">Midterm</string>
+    <string name="final_">Final</string>
+
+    <string name="dd">DD</string>
+    <string name="mm">MM</string>
+    <string name="yyyy">YYYY</string>
+    <string name="hour">HOUR</string>
+    <string name="minute">MINUTE</string>
+
+    <string name="undo">Undo</string>
+    <string name="restore">Restore</string>
+    <string name="lectures_removed">Lecture(s) removed!</string>
+    <string name="course_deleted">Course deleted!</string>
+
 </resources>

@@ -1,10 +1,11 @@
 package com.ba.schedule.domain.model
 
+import androidx.annotation.StringRes
 import java.util.*
 
 data class SnackbarMessage(
     val id: Long = UUID.randomUUID().mostSignificantBits,
-    val message: String,
+    @StringRes val message: Int,
     val dismissible: Boolean = true,
     val action: SnackbarAction? = null,
 )

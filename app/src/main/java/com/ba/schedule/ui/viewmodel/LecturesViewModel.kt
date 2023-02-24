@@ -2,6 +2,7 @@ package com.ba.schedule.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ba.schedule.R
 import com.ba.schedule.domain.model.Lecture
 import com.ba.schedule.domain.model.SnackbarAction
 import com.ba.schedule.domain.model.SnackbarManager
@@ -51,15 +52,17 @@ class LecturesViewModel @Inject constructor(
 
     fun onRemoveLecture() {
         viewModelScope.launch {
-            removedLecture = selectedLectures.value
-            selectedLectures.value.forEach {
+            removedLecture = selectedLectures.value.sortedWith(
+                compareBy(Lecture::day, Lecture::time)
+            )
+            removedLecture.forEach {
                 removeLectureUseCase(RemoveLectureParameter(it))
             }
             _selectedLectures.update { emptyList() }
             val message = SnackbarMessage(
-                message = "Lecture removed!",
+                message = R.string.lectures_removed,
                 action = SnackbarAction(
-                    label = "Undo",
+                    label = R.string.undo,
                     perform = {
                         viewModelScope.launch action@{
                             removedLecture.forEach {
