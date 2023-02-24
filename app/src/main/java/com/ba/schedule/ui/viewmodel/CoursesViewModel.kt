@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.ba.schedule.domain.model.Course
 import com.ba.schedule.domain.usecase.courses.*
 import com.ba.schedule.domain.util.data
-import com.ba.schedule.ui.util.SnackbarAction
-import com.ba.schedule.ui.util.SnackbarMessage
+import com.ba.schedule.domain.model.SnackbarAction
+import com.ba.schedule.domain.model.SnackbarMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
