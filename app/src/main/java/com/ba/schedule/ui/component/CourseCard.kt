@@ -34,7 +34,7 @@ fun CourseCard(
     )
 
     Row(
-        modifier = modifier,
+        modifier = modifier.height(IntrinsicSize.Max),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -60,7 +60,7 @@ fun CourseCard(
         ) {
             FilledIconButton(
                 onClick = onEdit,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f).fillMaxHeight(),
                 colors = IconButtonDefaults.filledIconButtonColors(
                     containerColor = MaterialTheme.colorScheme.tertiaryContainer,
                 ),
@@ -72,7 +72,7 @@ fun CourseCard(
             }
             FilledIconButton(
                 onClick = onDelete,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f).fillMaxHeight(),
                 colors = IconButtonDefaults.filledIconButtonColors(
                     containerColor = MaterialTheme.colorScheme.errorContainer,
                 ),

@@ -1,5 +1,6 @@
 package com.ba.schedule.ui.component
 
+import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -18,7 +20,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ba.schedule.ui.theme.alphaAtHalf
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(
+    ExperimentalFoundationApi::class, ExperimentalAnimationApi::class,
+    ExperimentalAnimationApi::class
+)
 @Composable
 fun TableCell(
     modifier: Modifier = Modifier,
@@ -32,17 +37,18 @@ fun TableCell(
     onClick: () -> Unit = {},
     onLongClick: () -> Unit = {},
 ) {
+    val isNotEmpty = content.isNotEmpty()
+    val backgroundColor by animateColorAsState(
+        targetValue = when {
+            isSelected -> selectedColor.copy(alpha = .4f)
+            isNotEmpty -> containerColor.copy(alpha = alphaAtHalf)
+            else -> emptyContainerColor.copy(alpha = .2f)
+        }
+    )
     Box(
         modifier = modifier
             .clip(MaterialTheme.shapes.medium)
-            .background(
-                color = when {
-                    isSelected -> selectedColor.copy(alpha = .4f)
-                    content.isNotEmpty() -> containerColor.copy(alpha = alphaAtHalf)
-                    else -> emptyContainerColor.copy(alpha = .2f)
-                }
-            )
-
+            .background(color = backgroundColor)
             .combinedClickable(
                 enabled = enabled,
                 onClick = onClick,
@@ -52,12 +58,18 @@ fun TableCell(
             .padding(all = 4.dp),
         contentAlignment = Alignment.Center,
     ) {
-        Text(
-            text = content,
-            fontSize = 12.sp,
-            textAlign = TextAlign.Center,
-            fontWeight = fontWeight,
-            lineHeight = 14.sp,
-        )
+        AnimatedVisibility(
+            visible = isNotEmpty,
+            enter = scaleIn(),
+            exit = scaleOut(),
+        ) {
+            Text(
+                text = content,
+                fontSize = 12.sp,
+                textAlign = TextAlign.Center,
+                fontWeight = fontWeight,
+                lineHeight = 14.sp,
+            )
+        }
     }
 }

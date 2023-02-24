@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -62,8 +63,11 @@ fun CourseSelectScreen(
         ) {
             items(items = courses, key = { it.id!! }) {
                 val isSelected = it == selectedCourse
-                val animatedCardWidth by animateDpAsState(targetValue = if (isSelected) cardWith * .7f else cardWith)
+                val animatedCardWidth by animateDpAsState(
+                    targetValue = if (isSelected) cardWith * .7f else cardWith,
+                )
                 Row(
+                    modifier = Modifier.height(IntrinsicSize.Max),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
@@ -71,21 +75,26 @@ fun CourseSelectScreen(
                         modifier = Modifier
                             .width(animatedCardWidth)
                             .clip(MaterialTheme.shapes.large)
-                            .background(MaterialTheme.colorScheme.primaryContainer)
+                            .background(MaterialTheme.colorScheme.secondaryContainer)
                             .clickable { viewModel.onItemSelect(it) }
                             .padding(horizontal = 16.dp, vertical = 10.dp),
                         contentAlignment = Alignment.CenterStart,
                     ) {
-                        Text(text = it.name, fontSize = 24.sp)
+                        Text(
+                            text = it.name,
+                            fontSize = 20.sp,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
                     }
                     FilledIconButton(
                         onClick = {
                             viewModel.onAddLecture()
                             navigateBack()
                         },
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier.weight(1f).fillMaxHeight(),
                         colors = IconButtonDefaults.filledIconButtonColors(
-                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
                         ),
                     ) {
                         Icon(

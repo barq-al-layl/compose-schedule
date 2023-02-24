@@ -1,6 +1,7 @@
 package com.ba.schedule.ui.screen
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -67,41 +68,61 @@ fun AddCourseScreen(
                     }
                 },
             )
-        }
+        },
     ) { innerPadding ->
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(24.dp)
                 .padding(innerPadding),
+            contentPadding = PaddingValues(24.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            OutlinedTextField(
-                value = courseName,
-                onValueChange = viewModel::onNameChange,
-                modifier = Modifier.fillMaxWidth(),
-                textStyle = TextStyle(fontSize = 18.sp),
-                label = { Text(text = "Course Name") },
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.Words,
-                    imeAction = ImeAction.Next,
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = { focusManager.moveFocus(FocusDirection.Next) },
-                ),
-                shape = MaterialTheme.shapes.large,
-            )
-            AddCourseTextField(
-                label = "Final",
-                state = final,
-                onEvent = viewModel::onFinalChange,
-            )
-            AddCourseTextField(
-                label = "Midterm",
-                state = midterm,
-                onEvent = viewModel::onMidtermChange,
-            )
+            item {
+                OutlinedTextField(
+                    value = courseName,
+                    onValueChange = viewModel::onNameChange,
+                    modifier = Modifier.fillMaxWidth(),
+                    textStyle = TextStyle(fontSize = 18.sp),
+                    label = { Text(text = "Course Name") },
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Words,
+                        imeAction = ImeAction.Next,
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = { focusManager.moveFocus(FocusDirection.Next) },
+                    ),
+                    shape = MaterialTheme.shapes.large,
+                )
+            }
+            item {
+                AddCourseTextField(
+                    label = "Final",
+                    state = final,
+                    onEvent = viewModel::onFinalChange,
+                )
+            }
+            item {
+                AddCourseTextField(
+                    label = "Midterm",
+                    state = midterm,
+                    onEvent = viewModel::onMidtermChange,
+                )
+            }
+            item {
+                AddCourseTextField(
+                    label = "Final",
+                    state = final,
+                    onEvent = viewModel::onFinalChange,
+                )
+            }
+            item {
+                AddCourseTextField(
+                    label = "Midterm",
+                    state = midterm,
+                    onEvent = viewModel::onMidtermChange,
+                )
+            }
         }
     }
 }

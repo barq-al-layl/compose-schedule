@@ -73,6 +73,18 @@ fun LecturesScreen(
         ),
     )
 
+    val scale by animateFloatAsState(
+        targetValue = if (isRemoveVisible) 1f else .9f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(
+                durationMillis = 400,
+                easing = LinearEasing
+            ),
+            repeatMode = RepeatMode.Reverse,
+        ),
+    )
+
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -160,16 +172,6 @@ fun LecturesScreen(
                             fontWeight = FontWeight.Medium,
                             containerColor = MaterialTheme.colorScheme.tertiaryContainer,
                         )
-                        val scale by animateFloatAsState(
-                            targetValue = if (isRemoveVisible) .9f else 1f,
-                            animationSpec = infiniteRepeatable(
-                                animation = tween(
-                                    durationMillis = 400,
-                                    easing = LinearEasing
-                                ),
-                                repeatMode = RepeatMode.Reverse,
-                            ),
-                        )
                         repeat(days.count()) { day ->
                             val lecture = lectures.find { day == it.day && time == it.time }
                             val isSelected = lecture in selectedLectures
@@ -180,7 +182,10 @@ fun LecturesScreen(
                                 content = lecture?.course?.name ?: "",
                                 enabled = !isLocked,
                                 isSelected = isSelected,
-                                onClick = { onLectureClick(day, time) },
+                                onClick = {
+                                    if (isRemoveVisible) viewModel.onSelectLecture(lecture)
+                                    else onLectureClick(day, time)
+                                },
                                 onLongClick = { viewModel.onSelectLecture(lecture) },
                             )
                         }

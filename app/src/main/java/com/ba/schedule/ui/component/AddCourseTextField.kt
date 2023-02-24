@@ -2,10 +2,8 @@ package com.ba.schedule.ui.component
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material3.*
@@ -41,9 +39,7 @@ fun AddCourseTextField(
                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = .55f),
                 shape = MaterialTheme.shapes.large,
             )
-            .padding(16.dp)
-            .imePadding()
-            .verticalScroll(rememberScrollState()),
+            .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Text(
