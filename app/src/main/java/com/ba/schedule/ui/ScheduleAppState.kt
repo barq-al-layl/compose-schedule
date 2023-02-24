@@ -1,24 +1,46 @@
 package com.ba.schedule.ui
 
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.ba.schedule.domain.model.SnackbarManager
 import com.ba.schedule.ui.navigation.HomeSection
 import com.ba.schedule.ui.navigation.MainDestination
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun rememberScheduleAppState(
     navController: NavHostController = rememberNavController(),
-): ScheduleAppState = remember(navController) {
-    ScheduleAppState(navController = navController)
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    coroutineScope: CoroutineScope = rememberCoroutineScope(),
+    snackbarManager: SnackbarManager = SnackbarManager,
+): ScheduleAppState = remember(
+    navController,
+    snackbarHostState,
+    coroutineScope,
+    snackbarManager,
+) {
+    ScheduleAppState(
+        navController = navController,
+        snackbarHostState = snackbarHostState,
+        coroutineScope = coroutineScope,
+        snackbarManager = snackbarManager,
+    )
 }
 
 class ScheduleAppState(
     val navController: NavHostController,
+    val snackbarHostState: SnackbarHostState,
+    coroutineScope: CoroutineScope,
+    private val snackbarManager: SnackbarManager,
 ) {
 
     val bottomBarTabs = HomeSection.values()
@@ -30,6 +52,25 @@ class ScheduleAppState(
 
     val currentRoute: String?
         get() = navController.currentDestination?.route
+
+    init {
+        coroutineScope.launch {
+            snackbarManager.messages.collect { currentMessages ->
+                if (currentMessages.isNotEmpty()) {
+                    val message = currentMessages.first()
+                    val res = snackbarHostState.showSnackbar(
+                        message = message.message,
+                        actionLabel = message.action?.label,
+                        withDismissAction = message.dismissible,
+                    )
+                    if (res == SnackbarResult.ActionPerformed) {
+                        message.action?.perform?.invoke()
+                    }
+                    snackbarManager.setMessageAsShown(message.id)
+                }
+            }
+        }
+    }
 
     fun navigateToBottomBarRoute(route: String) {
         if (route != currentRoute) {

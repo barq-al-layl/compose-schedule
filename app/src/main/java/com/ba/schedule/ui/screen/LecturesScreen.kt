@@ -30,21 +30,6 @@ fun LecturesScreen(
     onLectureClick: (Int, Int) -> Unit,
 ) {
 
-    val snackbarHostState = remember { SnackbarHostState() }
-
-    LaunchedEffect(Unit) {
-        viewModel.message.collect {
-            val res = snackbarHostState.showSnackbar(
-                message = it.message,
-                withDismissAction = it.dismissible,
-                actionLabel = it.action?.label,
-            )
-            if (res == SnackbarResult.ActionPerformed) {
-                it.action?.perform?.invoke()
-            }
-        }
-    }
-
     val tablePadding = 6.dp
 
     val configuration = LocalConfiguration.current
@@ -107,9 +92,6 @@ fun LecturesScreen(
                     }
                 },
             )
-        },
-        snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState)
         },
     ) { innerPadding ->
         Row(

@@ -36,21 +36,7 @@ fun CoursesScreen(
     val courses by viewModel.courses.collectAsState()
     val expandedItem by viewModel.expandedItem.collectAsState()
 
-    val snackbarHosState = remember { SnackbarHostState() }
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp - 32.dp
-
-    LaunchedEffect(Unit) {
-        viewModel.message.collect {
-            val res = snackbarHosState.showSnackbar(
-                it.message,
-                withDismissAction = it.dismissible,
-                actionLabel = it.action?.label,
-            )
-            if (res == SnackbarResult.ActionPerformed) {
-                it.action?.perform?.invoke()
-            }
-        }
-    }
 
     Scaffold(
         topBar = {
@@ -97,9 +83,6 @@ fun CoursesScreen(
                     focusRequester.requestFocus()
                 }
             }
-        },
-        snackbarHost = {
-            SnackbarHost(hostState = snackbarHosState)
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { navigateToAddCourse(-1) }) {

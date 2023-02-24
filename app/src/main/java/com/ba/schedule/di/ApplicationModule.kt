@@ -3,6 +3,7 @@ package com.ba.schedule.di
 import android.content.Context
 import androidx.room.Room
 import com.ba.schedule.data.database.ScheduleDatabase
+import com.ba.schedule.domain.model.SnackbarManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,5 +34,9 @@ object ApplicationModule {
 
     @Provides
     fun provideLecturesDao(db: ScheduleDatabase) = db.lecturesDao
+
+    @Provides
+    @Singleton
+    fun provideSnackbarManager() = SnackbarManager
 
 }

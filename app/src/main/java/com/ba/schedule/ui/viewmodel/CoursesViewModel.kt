@@ -3,10 +3,11 @@ package com.ba.schedule.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ba.schedule.domain.model.Course
+import com.ba.schedule.domain.model.SnackbarAction
+import com.ba.schedule.domain.model.SnackbarManager
+import com.ba.schedule.domain.model.SnackbarMessage
 import com.ba.schedule.domain.usecase.courses.*
 import com.ba.schedule.domain.util.data
-import com.ba.schedule.domain.model.SnackbarAction
-import com.ba.schedule.domain.model.SnackbarMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -17,6 +18,7 @@ class CoursesViewModel @Inject constructor(
     getCoursesUseCase: GetCoursesUseCase,
     private val addCourseUseCase: AddCourseUseCase,
     private val deleteCourseUseCase: DeleteCourseUseCase,
+    private val snackbarManager: SnackbarManager = SnackbarManager,
 ) : ViewModel() {
 
     private val _showSearch = MutableStateFlow(false)
@@ -40,9 +42,6 @@ class CoursesViewModel @Inject constructor(
             initialValue = emptyList(),
         )
 
-    private val _message = MutableSharedFlow<SnackbarMessage>()
-    val message = _message.asSharedFlow()
-
     private var lastDeletedCourse: Course? = null
 
     init {
@@ -57,19 +56,18 @@ class CoursesViewModel @Inject constructor(
         viewModelScope.launch {
             lastDeletedCourse = course
             deleteCourseUseCase(DeleteCourseParameter(course))
-            _message.emit(
-                SnackbarMessage(
-                    message = "Course deleted!",
-                    action = SnackbarAction("Restore") {
-                        viewModelScope.launch action@{
-                            addCourseUseCase(
-                                AddCourseParameter(lastDeletedCourse ?: return@action)
-                            )
-                            lastDeletedCourse = null
-                        }
-                    },
-                ),
+            val message = SnackbarMessage(
+                message = "Course deleted!",
+                action = SnackbarAction("Restore") {
+                    viewModelScope.launch action@{
+                        addCourseUseCase(
+                            AddCourseParameter(lastDeletedCourse ?: return@action)
+                        )
+                        lastDeletedCourse = null
+                    }
+                },
             )
+            snackbarManager.showMessage(message)
         }
     }
 

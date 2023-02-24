@@ -3,10 +3,11 @@ package com.ba.schedule.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ba.schedule.domain.model.Lecture
+import com.ba.schedule.domain.model.SnackbarAction
+import com.ba.schedule.domain.model.SnackbarManager
+import com.ba.schedule.domain.model.SnackbarMessage
 import com.ba.schedule.domain.usecase.lectures.*
 import com.ba.schedule.domain.util.data
-import com.ba.schedule.domain.model.SnackbarAction
-import com.ba.schedule.domain.model.SnackbarMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -17,6 +18,7 @@ class LecturesViewModel @Inject constructor(
     getLecturesUseCase: GetLecturesUseCase,
     private val addLectureUseCase: AddLectureUseCase,
     private val removeLectureUseCase: RemoveLectureUseCase,
+    private val snackbarManager: SnackbarManager = SnackbarManager,
 ) : ViewModel() {
 
     private val _isLayoutLocked = MutableStateFlow(true)
@@ -29,9 +31,6 @@ class LecturesViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = emptyList(),
         )
-
-    private val _message = MutableSharedFlow<SnackbarMessage>()
-    val message = _message.asSharedFlow()
 
     private val _selectedLectures = MutableStateFlow(listOf<Lecture>())
     val selectedLectures = _selectedLectures.asStateFlow()
@@ -57,21 +56,20 @@ class LecturesViewModel @Inject constructor(
                 removeLectureUseCase(RemoveLectureParameter(it))
             }
             _selectedLectures.update { emptyList() }
-            _message.emit(
-                SnackbarMessage(
-                    message = "Lecture removed!",
-                    action = SnackbarAction(
-                        label = "Undo",
-                        perform = {
-                            viewModelScope.launch action@{
-                                removedLecture.forEach {
-                                    addLectureUseCase(AddLectureParameter(it))
-                                }
+            val message = SnackbarMessage(
+                message = "Lecture removed!",
+                action = SnackbarAction(
+                    label = "Undo",
+                    perform = {
+                        viewModelScope.launch action@{
+                            removedLecture.forEach {
+                                addLectureUseCase(AddLectureParameter(it))
                             }
                         }
-                    ),
-                )
+                    }
+                ),
             )
+            snackbarManager.showMessage(message)
         }
     }
 
