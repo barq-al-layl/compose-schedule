@@ -18,7 +18,7 @@ class CoursesViewModel @Inject constructor(
     getCoursesUseCase: GetCoursesUseCase,
     private val addCourseUseCase: AddCourseUseCase,
     private val deleteCourseUseCase: DeleteCourseUseCase,
-    private val snackbarManager: SnackbarManager = SnackbarManager,
+    private val snackbarManager: SnackbarManager,
 ) : ViewModel() {
 
     private val _showSearch = MutableStateFlow(false)

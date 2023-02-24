@@ -18,7 +18,7 @@ class LecturesViewModel @Inject constructor(
     getLecturesUseCase: GetLecturesUseCase,
     private val addLectureUseCase: AddLectureUseCase,
     private val removeLectureUseCase: RemoveLectureUseCase,
-    private val snackbarManager: SnackbarManager = SnackbarManager,
+    private val snackbarManager: SnackbarManager,
 ) : ViewModel() {
 
     private val _isLayoutLocked = MutableStateFlow(true)
