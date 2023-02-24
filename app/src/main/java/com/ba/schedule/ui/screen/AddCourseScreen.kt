@@ -109,20 +109,6 @@ fun AddCourseScreen(
                     onEvent = viewModel::onMidtermChange,
                 )
             }
-            item {
-                AddCourseTextField(
-                    label = "Final",
-                    state = final,
-                    onEvent = viewModel::onFinalChange,
-                )
-            }
-            item {
-                AddCourseTextField(
-                    label = "Midterm",
-                    state = midterm,
-                    onEvent = viewModel::onMidtermChange,
-                )
-            }
         }
     }
 }
