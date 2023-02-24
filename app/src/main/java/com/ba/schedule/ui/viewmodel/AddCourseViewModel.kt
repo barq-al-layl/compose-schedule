@@ -3,8 +3,8 @@ package com.ba.schedule.ui.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ba.schedule.domain.model.AddCourseTextFieldEvent
-import com.ba.schedule.domain.model.AddCourseTextFieldState
+import com.ba.schedule.ui.util.AddCourseTextFieldEvent
+import com.ba.schedule.ui.util.AddCourseTextFieldState
 import com.ba.schedule.domain.model.Course
 import com.ba.schedule.domain.usecase.courses.AddCourseParameter
 import com.ba.schedule.domain.usecase.courses.AddCourseUseCase

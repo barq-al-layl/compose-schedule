@@ -1,4 +1,4 @@
-package com.ba.schedule.domain.model
+package com.ba.schedule.ui.util
 
 data class AddCourseTextFieldState(
     val day: String = "",

@@ -3,8 +3,8 @@ package com.ba.schedule.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ba.schedule.domain.model.Lecture
-import com.ba.schedule.domain.model.SnackbarAction
-import com.ba.schedule.domain.model.SnackbarMessage
+import com.ba.schedule.ui.util.SnackbarAction
+import com.ba.schedule.ui.util.SnackbarMessage
 import com.ba.schedule.domain.usecase.lectures.*
 import com.ba.schedule.domain.util.data
 import dagger.hilt.android.lifecycle.HiltViewModel

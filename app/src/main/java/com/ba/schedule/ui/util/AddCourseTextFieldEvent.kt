@@ -1,4 +1,4 @@
-package com.ba.schedule.domain.model
+package com.ba.schedule.ui.util
 
 sealed class AddCourseTextFieldEvent {
     data class YearChange(val value: String) : AddCourseTextFieldEvent()
