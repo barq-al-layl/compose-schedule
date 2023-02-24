@@ -36,7 +36,7 @@ class CoursesViewModel @Inject constructor(
             courses.filter { it.name.contains(substring, ignoreCase = true) }
         }.stateIn(
             scope = viewModelScope,
-            started = SharingStarted.Eagerly,
+            started = SharingStarted.WhileSubscribed(5000),
             initialValue = emptyList(),
         )
 

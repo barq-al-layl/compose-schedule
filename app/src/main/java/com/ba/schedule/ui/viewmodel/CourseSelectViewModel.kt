@@ -26,7 +26,7 @@ class CourseSelectViewModel @Inject constructor(
         .mapNotNull { it.data }
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.Lazily,
+            started = SharingStarted.WhileSubscribed(5000),
             initialValue = emptyList(),
         )
 

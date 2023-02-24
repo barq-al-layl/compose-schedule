@@ -26,7 +26,7 @@ class LecturesViewModel @Inject constructor(
         .mapNotNull { it.data }
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.Eagerly,
+            started = SharingStarted.WhileSubscribed(5000),
             initialValue = emptyList(),
         )
 
