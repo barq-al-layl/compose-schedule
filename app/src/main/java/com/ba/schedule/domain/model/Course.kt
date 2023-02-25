@@ -1,10 +1,10 @@
 package com.ba.schedule.domain.model
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import java.time.LocalDateTime
 
-@Parcelize
 data class Course(
     val id: Int? = null,
     val name: String = "",
-) : Parcelable
+    val final: LocalDateTime? = null,
+    val midterm: LocalDateTime? = null,
+)

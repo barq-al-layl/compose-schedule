@@ -1,9 +1,10 @@
 package com.ba.schedule.ui.viewmodel
 
-import android.os.Build
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ba.schedule.domain.model.AddCourseTextFieldEvent
+import com.ba.schedule.domain.model.AddCourseTextFieldState
 import com.ba.schedule.domain.model.Course
 import com.ba.schedule.domain.usecase.courses.AddCourseParameter
 import com.ba.schedule.domain.usecase.courses.AddCourseUseCase
@@ -11,14 +12,13 @@ import com.ba.schedule.domain.usecase.courses.GetCourseByIdParameter
 import com.ba.schedule.domain.usecase.courses.GetCourseByIdUseCase
 import com.ba.schedule.domain.util.data
 import com.ba.schedule.ui.navigation.MainDestination
-import com.ba.schedule.domain.model.AddCourseTextFieldEvent
-import com.ba.schedule.domain.model.AddCourseTextFieldState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,22 +28,18 @@ class AddCourseViewModel @Inject constructor(
     private val addCourseUseCase: AddCourseUseCase,
 ) : ViewModel() {
 
-    private val thisYear = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        LocalDate.now().year
-    } else {
-        2023
-    }
+    private val thisYear = LocalDate.now().year
 
     private val _courseName = MutableStateFlow("")
     val courseName = _courseName.asStateFlow()
 
     private val _final = MutableStateFlow(
-        AddCourseTextFieldState(year = thisYear.toString(), minute = "00")
+        AddCourseTextFieldState()
     )
     val final = _final.asStateFlow()
 
     private val _midterm = MutableStateFlow(
-        AddCourseTextFieldState(year = thisYear.toString(), minute = "00")
+        AddCourseTextFieldState()
     )
     val midterm = _midterm.asStateFlow()
 
@@ -53,6 +49,8 @@ class AddCourseViewModel @Inject constructor(
         viewModelScope.launch {
             getCourseByIdUseCase(GetCourseByIdParameter(courseId)).data?.let { course ->
                 _courseName.update { course.name }
+                course.final?.updateFlow(_final)
+                course.midterm?.updateFlow(_midterm)
             }
         }
     }
@@ -64,6 +62,8 @@ class AddCourseViewModel @Inject constructor(
             val course = Course(
                 id = courseId.takeIf { it != -1 },
                 name = name,
+                final = final.value.toLocalDateTime(),
+                midterm = midterm.value.toLocalDateTime()
             )
             addCourseUseCase(AddCourseParameter(course))
         }
@@ -88,7 +88,7 @@ class AddCourseViewModel @Inject constructor(
         when (this) {
             is AddCourseTextFieldEvent.YearChange -> {
                 val x = value.toIntOrNull() ?: 0
-                if (x !in thisYear..(thisYear + 10)) return
+                if (x > thisYear + 10) return
                 if (value.length > 4) return
                 it.copy(year = value)
             }
@@ -117,5 +117,30 @@ class AddCourseViewModel @Inject constructor(
             }
             AddCourseTextFieldEvent.Reset -> AddCourseTextFieldState()
         }
+    }
+
+    private fun AddCourseTextFieldState.toLocalDateTime(): LocalDateTime? {
+        return if (isEmpty()) null
+        else LocalDateTime.of(
+            year.toInt(), month.toInt(), day.toInt(),
+            hour.toInt(), minute.toInt(),
+        )
+    }
+
+    private fun AddCourseTextFieldState.isEmpty(): Boolean {
+        return day.isEmpty() || month.isEmpty() || year.isEmpty()
+                || hour.isEmpty() || minute.isEmpty()
+    }
+
+    private fun LocalDateTime.updateFlow(
+        flow: MutableStateFlow<AddCourseTextFieldState>,
+    ) = flow.update {
+        AddCourseTextFieldState(
+            year = year.toString(),
+            month = monthValue.toString(),
+            day = dayOfMonth.toString(),
+            hour = hour.toString(),
+            minute = minute.toString().padStart(2, '0'),
+        )
     }
 }

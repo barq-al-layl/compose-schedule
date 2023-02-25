@@ -2,6 +2,7 @@ package com.ba.schedule.data.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.ba.schedule.data.entity.CourseEntity
 import com.ba.schedule.data.entity.LectureEntity
 
@@ -13,6 +14,7 @@ import com.ba.schedule.data.entity.LectureEntity
     version = 1,
     exportSchema = false,
 )
+@TypeConverters(Converters::class)
 abstract class ScheduleDatabase : RoomDatabase() {
 
     abstract val coursesDao: CoursesDao
