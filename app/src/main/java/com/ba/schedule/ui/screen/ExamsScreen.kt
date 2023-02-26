@@ -1,18 +1,17 @@
 package com.ba.schedule.ui.screen
 
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -32,11 +31,15 @@ fun EventsScreen(
 ) {
     val examType by viewModel.examType.collectAsState()
     val exams by viewModel.exams.collectAsState()
-    val times by viewModel.header.collectAsState()
-    val dates by viewModel.dates.collectAsState()
+    val localTimes by viewModel.localTimes.collectAsState()
+    val localDates by viewModel.localDates.collectAsState()
+    val formattedDate by viewModel.formattedDate.collectAsState()
+    val formattedTime by viewModel.formattedTime.collectAsState()
 
     val tablePadding = 8.dp
     val configuration = LocalConfiguration.current
+
+    val cellWidth = (configuration.screenWidthDp.dp - tablePadding * 4) / 3
 
     val cellHeight = (configuration.screenHeightDp.dp -
             tablePadding * (exams.size + 2)) / 10
@@ -49,17 +52,44 @@ fun EventsScreen(
         )
     )
 
+    val tableAngel by animateFloatAsState(
+        targetValue = if (examType == ExamType.Final) 0f else 360f,
+        animationSpec = spring(
+            stiffness = Spring.StiffnessLow
+        ),
+    )
+
+    val tableScale = remember { Animatable(1f) }
+    LaunchedEffect(examType) {
+        tableScale.animateTo(
+            targetValue = .4f,
+            animationSpec = spring(
+                stiffness = Spring.StiffnessLow
+            ),
+        )
+        tableScale.animateTo(
+            targetValue = 1f,
+            animationSpec = spring(
+                stiffness = Spring.StiffnessLow
+            ),
+        )
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text(text = stringResource(id = R.string.exams)) },
                 actions = {
-                    IconButton(onClick = viewModel::onTypeChanged) {
+                    IconButton(
+                        onClick = viewModel::onTypeChanged,
+                        modifier = Modifier.padding(end = 16.dp),
+                    ) {
                         Icon(
                             imageVector = Icons.Rounded.SwapHoriz,
                             contentDescription = null,
                             modifier = Modifier
-                                .size(32.dp)
+                                .padding(4.dp)
+                                .size(38.dp)
                                 .rotate(iconAngel),
                         )
                     }
@@ -67,67 +97,94 @@ fun EventsScreen(
             )
         }
     ) { innerPadding ->
-        Row(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
-                .padding(tablePadding),
-            horizontalArrangement = Arrangement.spacedBy(tablePadding),
+                .padding(innerPadding),
+            contentAlignment = Alignment.Center,
         ) {
-            Column(
-                modifier = Modifier.weight(2f),
-                verticalArrangement = Arrangement.spacedBy(tablePadding),
+            Row(
+                modifier = Modifier
+                    .padding(tablePadding)
+                    .rotate(tableAngel)
+                    .scale(tableScale.value),
+                horizontalArrangement = Arrangement.spacedBy(tablePadding),
             ) {
-                Box(
-                    modifier = Modifier
-                        .height(cellHeight)
-                        .fillMaxWidth(),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(
-                        text = stringResource(
-                            id = when (examType) {
-                                ExamType.Final -> R.string.final_
-                                ExamType.Midterm -> R.string.midterm
-                            }
-                        ),
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Medium,
-                        textAlign = TextAlign.Center,
-                    )
-                }
-                dates.forEach {
-                    TableCell(
-                        content = it,
-                        modifier = Modifier
-                            .height(cellHeight)
-                            .fillMaxWidth(),
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        fontWeight = FontWeight.Medium,
-                    )
-                }
-            }
-            times.forEach { time ->
                 Column(
-                    modifier = Modifier.weight(2f),
+                    modifier = Modifier.width(cellWidth),
                     verticalArrangement = Arrangement.spacedBy(tablePadding),
                 ) {
-                    TableCell(
-                        content = time,
+                    Box(
                         modifier = Modifier
                             .height(cellHeight)
                             .fillMaxWidth(),
-                        containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                        fontWeight = FontWeight.Medium,
-                    )
-                    dates.forEach { date ->
-                        val exam = exams.find { it.date == date && it.time == time }
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text(
+                            text = stringResource(
+                                id = when (examType) {
+                                    ExamType.Final -> R.string.final_
+                                    ExamType.Midterm -> R.string.midterm
+                                }
+                            ),
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Medium,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+                    formattedDate.forEach {
                         TableCell(
-                            content = exam?.course?.name ?: "",
+                            content = it,
                             modifier = Modifier
                                 .height(cellHeight)
                                 .fillMaxWidth(),
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            fontWeight = FontWeight.Medium,
                         )
+                    }
+                }
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(tablePadding),
+                ) {
+                    itemsIndexed(localTimes) { index, time ->
+                        Column(
+                            modifier = Modifier.width(cellWidth),
+                            verticalArrangement = Arrangement.spacedBy(tablePadding),
+                        ) {
+                            TableCell(
+                                content = formattedTime[index],
+                                modifier = Modifier
+                                    .height(cellHeight)
+                                    .fillMaxWidth(),
+                                containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                                fontWeight = FontWeight.Medium,
+                            )
+                            localDates.forEach { date ->
+                                val exam = exams.filter { date == it.date && it.time == time }
+                                if (exam.isNotEmpty()) {
+                                    Column(
+                                        modifier = Modifier.height(cellHeight),
+                                        verticalArrangement = Arrangement.spacedBy(tablePadding),
+                                    ) {
+                                        exam.forEach {
+                                            TableCell(
+                                                content = it.course?.name ?: "",
+                                                modifier = Modifier
+                                                    .weight(1f)
+                                                    .fillMaxWidth(),
+                                            )
+                                        }
+                                    }
+                                } else {
+                                    TableCell(
+                                        content = "",
+                                        modifier = Modifier
+                                            .height(cellHeight)
+                                            .fillMaxWidth(),
+                                    )
+                                }
+                            }
+                        }
                     }
                 }
             }

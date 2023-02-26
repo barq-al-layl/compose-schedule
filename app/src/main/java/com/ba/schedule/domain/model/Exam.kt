@@ -1,8 +1,11 @@
 package com.ba.schedule.domain.model
 
+import java.time.LocalDate
+import java.time.LocalTime
+
 data class Exam(
     val course: Course? = null,
-    val date: String,
-    val time: String,
+    val date: LocalDate,
+    val time: LocalTime,
     val type: ExamType,
 )

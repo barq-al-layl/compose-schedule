@@ -46,11 +46,14 @@ fun CoursesScreen(
             TopAppBar(
                 title = { Text(text = stringResource(id = R.string.courses)) },
                 actions = {
-                    IconButton(onClick = viewModel::onShowSearchChange) {
+                    IconButton(
+                        onClick = viewModel::onShowSearchChange,
+                        modifier = Modifier.padding(end = 16.dp),
+                    ) {
                         Icon(
                             imageVector = Icons.Rounded.Search,
                             contentDescription = null,
-                            modifier = Modifier.size(28.dp),
+                            modifier = Modifier.size(30.dp),
                         )
                     }
                 },

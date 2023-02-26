@@ -15,8 +15,8 @@ data class CourseWithExams(
     fun toExams() = exams.map {
         Exam(
             course = course.toCourse(),
-            date = it.date.toString(),
-            time = it.time.toString(),
+            date = it.date,
+            time = it.time,
             type = it.type,
         )
     }

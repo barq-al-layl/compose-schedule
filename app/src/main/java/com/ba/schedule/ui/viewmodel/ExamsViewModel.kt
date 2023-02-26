@@ -3,15 +3,19 @@ package com.ba.schedule.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ba.schedule.domain.model.ExamType
-import com.ba.schedule.domain.usecase.exams.GetExamsUseCase
+import com.ba.schedule.domain.usecase.exams.*
 import com.ba.schedule.domain.util.data
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
+import java.time.LocalDate
+import java.time.LocalTime
 import javax.inject.Inject
 
 @HiltViewModel
 class ExamsViewModel @Inject constructor(
     getExamsUseCase: GetExamsUseCase,
+    formatDateUseCase: FormatDateUseCase,
+    formatTimeUseCase: FormatTimeUseCase,
 ) : ViewModel() {
 
     private val _examType = MutableStateFlow(ExamType.Final)
@@ -21,26 +25,30 @@ class ExamsViewModel @Inject constructor(
         .mapNotNull { it.data }
         .combine(examType) { exams, type ->
             exams.filter { it.type == type }
-        }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        )
+        }.toStateFlow(emptyList())
 
-    val header = exams.map { exams ->
-        exams.fold(listOf<String>()) { acc, exam ->
+    val localTimes = exams.map { exams ->
+        exams.fold(listOf<LocalTime>()) { acc, exam ->
             acc + exam.time
-        }.distinct()
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = emptyList()
-    )
+        }.distinct().sorted()
+    }.toStateFlow(emptyList())
 
-    val dates = exams.map { exams ->
-        exams.fold(listOf<String>()) { acc, exam ->
+    val formattedTime = localTimes.map {
+        it.mapNotNull { time ->
+            formatTimeUseCase(FormatTimeUseCaseParameter(time)).data
+        }
+    }.toStateFlow(emptyList())
+
+    val localDates = exams.map { exams ->
+        exams.fold(listOf<LocalDate>()) { acc, exam ->
             acc + exam.date
-        }.distinct()
+        }.distinct().sorted()
+    }.toStateFlow(emptyList())
+
+    val formattedDate = localDates.map {
+        it.mapNotNull { date ->
+            formatDateUseCase(FormatDateUseCaseParameter(date)).data
+        }
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
@@ -53,4 +61,10 @@ class ExamsViewModel @Inject constructor(
             ExamType.Midterm -> ExamType.Final
         }
     }
+
+    private fun <T> Flow<T>.toStateFlow(initialValue: T): StateFlow<T> = this.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = initialValue
+    )
 }

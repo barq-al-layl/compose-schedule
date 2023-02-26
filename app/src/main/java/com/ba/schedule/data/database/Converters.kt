@@ -4,6 +4,8 @@ import androidx.room.TypeConverter
 import com.ba.schedule.domain.model.ExamType
 import java.time.LocalDate
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 class Converters {
 
@@ -19,12 +21,12 @@ class Converters {
 
     @TypeConverter
     fun fromLocalTime(time: LocalTime): String {
-        return time.toString()
+        return time.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
     }
 
     @TypeConverter
     fun toLocalTime(value: String): LocalTime {
-        return LocalTime.parse(value)
+        return LocalTime.parse(value, DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
     }
 
     @TypeConverter

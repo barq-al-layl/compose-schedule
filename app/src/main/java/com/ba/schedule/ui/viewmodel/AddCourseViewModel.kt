@@ -54,16 +54,11 @@ class AddCourseViewModel @Inject constructor(
                 .data ?: return@launch
             exams.find { it.type == ExamType.Final }?.let {
                 finalExam = it
-                LocalDateTime.of(
-                    LocalDate.parse(it.date.substringBefore('\n')),
-                    LocalTime.parse(it.time)
-                )
-                    .updateFlow(_final)
+                LocalDateTime.of(it.date, it.time).updateFlow(_final)
             }
             exams.find { it.type == ExamType.Midterm }?.let {
                 midtermExam = it
-                LocalDateTime.of(LocalDate.parse(it.date), LocalTime.parse(it.time))
-                    .updateFlow(_midterm)
+                LocalDateTime.of(it.date, it.time).updateFlow(_midterm)
             }
         }
     }
@@ -84,7 +79,7 @@ class AddCourseViewModel @Inject constructor(
             } else {
                 val exam = Exam(
                     course = course,
-                    date = final.value.toDateString(),
+                    date = final.value.toLocalDate(),
                     time = final.value.toTimeString(),
                     type = ExamType.Final,
                 )
@@ -95,7 +90,7 @@ class AddCourseViewModel @Inject constructor(
             } else {
                 val exam = Exam(
                     course = course,
-                    date = midterm.value.toDateString(),
+                    date = midterm.value.toLocalDate(),
                     time = midterm.value.toTimeString(),
                     type = ExamType.Midterm,
                 )
@@ -150,14 +145,14 @@ class AddCourseViewModel @Inject constructor(
         }
     }
 
-    private fun AddCourseTextFieldState.toDateString(): String {
-        val date = LocalDate.of(year.toInt(), month.toInt(), day.toInt())
-        return date.toString()
+    private fun AddCourseTextFieldState.toLocalDate(): LocalDate {
+        return LocalDate.of(year.toInt(), month.toInt(), day.toInt())
     }
 
-    private fun AddCourseTextFieldState.toTimeString(): String {
-        val time = LocalTime.of(hour.toInt(), minute.toInt())
-        return time.toString()
+    private fun AddCourseTextFieldState.toTimeString(): LocalTime {
+        var hour = hour.toInt()
+        if (hour < 7) hour += 12
+        return LocalTime.of(hour, minute.toInt())
     }
 
     private fun AddCourseTextFieldState.isEmpty(): Boolean {
@@ -168,6 +163,8 @@ class AddCourseViewModel @Inject constructor(
     private fun LocalDateTime.updateFlow(
         flow: MutableStateFlow<AddCourseTextFieldState>,
     ) = flow.update {
+        var hour = hour
+        if (hour > 12) hour -= 12
         AddCourseTextFieldState(
             year = year.toString(),
             month = monthValue.toString(),
