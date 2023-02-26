@@ -60,7 +60,9 @@ fun CourseCard(
         ) {
             FilledIconButton(
                 onClick = onEdit,
-                modifier = Modifier.weight(1f).fillMaxHeight(),
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight(),
                 colors = IconButtonDefaults.filledIconButtonColors(
                     containerColor = MaterialTheme.colorScheme.tertiaryContainer,
                 ),
@@ -72,7 +74,9 @@ fun CourseCard(
             }
             FilledIconButton(
                 onClick = onDelete,
-                modifier = Modifier.weight(1f).fillMaxHeight(),
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight(),
                 colors = IconButtonDefaults.filledIconButtonColors(
                     containerColor = MaterialTheme.colorScheme.errorContainer,
                 ),

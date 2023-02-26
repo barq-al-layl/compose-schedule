@@ -22,8 +22,8 @@ class DefaultCoursesRepository @Inject constructor(
         return dao.getBy(id)?.toCourse()
     }
 
-    override suspend fun add(course: Course) {
-        dao.insert(CourseEntity.fromCourse(course))
+    override suspend fun add(course: Course): Long {
+        return dao.insert(CourseEntity.fromCourse(course))
     }
 
     override suspend fun delete(course: Course) {

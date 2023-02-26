@@ -12,12 +12,10 @@ class DefaultLecturesRepository @Inject constructor(
     private val dao: LecturesDao,
 ) : LecturesRepository {
     override fun getAll(): Flow<List<Lecture>> {
-        return dao.getAll().map { value ->
-            val lectures = mutableSetOf<Lecture>()
-            value.forEach {
-                lectures += it.toLectures()
+        return dao.getCourseWithLectures().map {
+            it.fold(listOf()) { lectures, courseWithLectures ->
+                lectures + courseWithLectures.toLectures()
             }
-            lectures.toList()
         }
     }
 

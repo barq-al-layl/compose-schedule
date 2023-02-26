@@ -10,5 +10,5 @@ interface LecturesDao : BaseDao<LectureEntity> {
 
     @Transaction
     @Query("SELECT * FROM courses")
-    fun getAll(): Flow<List<CourseWithLectures>>
+    fun getCourseWithLectures(): Flow<List<CourseWithLectures>>
 }

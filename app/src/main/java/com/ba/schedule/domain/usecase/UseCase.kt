@@ -17,11 +17,15 @@ abstract class UseCase<in P, R>(
                 }
             }
         } catch (e: Exception) {
-            Log.d("UseCase ", e.toString())
+            Log.d(TAG, e.toString())
             Resource.Error(e)
         }
     }
 
     @Throws(RuntimeException::class)
     protected abstract suspend fun execute(parameters: P): R
+
+    companion object {
+        const val TAG = "UseCase"
+    }
 }

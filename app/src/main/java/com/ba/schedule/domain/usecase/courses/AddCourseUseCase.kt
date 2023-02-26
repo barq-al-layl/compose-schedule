@@ -7,9 +7,9 @@ import javax.inject.Inject
 
 class AddCourseUseCase @Inject constructor(
     private val repository: CoursesRepository,
-) : UseCase<AddCourseParameter, Unit>() {
-    override suspend fun execute(parameters: AddCourseParameter) {
-        repository.add(parameters.course)
+) : UseCase<AddCourseParameter, Long>() {
+    override suspend fun execute(parameters: AddCourseParameter): Long {
+        return repository.add(parameters.course)
     }
 }
 

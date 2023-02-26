@@ -20,14 +20,14 @@ enum class HomeSection(
         label = R.string.lectures,
     ),
     Courses(
-        route = "home/courses",
+        route = "home/course",
         icon = Icons.Rounded.School,
         label = R.string.courses,
     ),
     Events(
         route = "home/events",
         icon = Icons.Rounded.CalendarMonth,
-        label = R.string.events,
+        label = R.string.exams,
     ),
     Settings(
         route = "home/settings",

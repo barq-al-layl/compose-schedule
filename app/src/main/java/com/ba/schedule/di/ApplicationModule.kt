@@ -36,6 +36,9 @@ object ApplicationModule {
     fun provideLecturesDao(db: ScheduleDatabase) = db.lecturesDao
 
     @Provides
+    fun provideExamsDao(db: ScheduleDatabase) = db.examsDao
+
+    @Provides
     @Singleton
     fun provideSnackbarManager() = SnackbarManager
 

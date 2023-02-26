@@ -3,7 +3,7 @@
 
     <string name="lectures">Lectures</string>
     <string name="courses">Courses</string>
-    <string name="events">Events</string>
+    <string name="exams">Exams</string>
     <string name="settings">Settings</string>
 
     <string-array name="days">

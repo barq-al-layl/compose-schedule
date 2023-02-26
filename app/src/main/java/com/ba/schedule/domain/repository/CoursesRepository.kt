@@ -8,7 +8,7 @@ interface CoursesRepository {
 
     suspend fun getById(id: Int): Course?
 
-    suspend fun add(course: Course)
+    suspend fun add(course: Course): Long
 
     suspend fun delete(course: Course)
 
