@@ -24,7 +24,7 @@ import com.ba.schedule.domain.model.Period
 import com.ba.schedule.domain.model.WeekDay
 import com.ba.schedule.ui.component.TableCell
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
 fun LecturesScreen(
     viewModel: LecturesViewModel = hiltViewModel(),
@@ -59,17 +59,15 @@ fun LecturesScreen(
         ),
     )
 
-    val scale by animateFloatAsState(
-        targetValue = if (isRemoveVisible) 1f else .9f,
+    val infiniteTransition = rememberInfiniteTransition()
+    val cellScale = infiniteTransition.animateFloat(
+        initialValue = 1f,
+        targetValue = .9f,
         animationSpec = infiniteRepeatable(
-            animation = tween(
-                durationMillis = 400,
-                easing = LinearEasing
-            ),
-            repeatMode = RepeatMode.Reverse,
-        ),
+            tween(durationMillis = 400, easing = LinearEasing),
+            RepeatMode.Reverse,
+        )
     )
-
 
     Scaffold(
         topBar = {
@@ -111,8 +109,8 @@ fun LecturesScreen(
                 ) {
                     androidx.compose.animation.AnimatedVisibility(
                         visible = isRemoveVisible,
-                        enter = slideInHorizontally { -it } + fadeIn(),
-                        exit = slideOutHorizontally { -it } + fadeOut(),
+                        enter = scaleIn() + fadeIn(),
+                        exit = scaleOut() + fadeOut(),
                     ) {
                         FilledIconButton(
                             onClick = viewModel::onRemoveLecture,
@@ -161,7 +159,7 @@ fun LecturesScreen(
                             TableCell(
                                 modifier = Modifier
                                     .size(width = cellWidth, height = cellHeight)
-                                    .scale(if (isSelected) scale else 1f),
+                                    .scale(if (isSelected) cellScale.value else 1f),
                                 content = lecture?.course?.name ?: "",
                                 enabled = !isLocked,
                                 isSelected = isSelected,
