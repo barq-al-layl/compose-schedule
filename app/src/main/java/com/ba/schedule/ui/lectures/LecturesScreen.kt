@@ -1,4 +1,4 @@
-package com.ba.schedule.ui.screen
+package com.ba.schedule.ui.lectures
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
@@ -23,7 +23,6 @@ import com.ba.schedule.R
 import com.ba.schedule.domain.model.Period
 import com.ba.schedule.domain.model.WeekDay
 import com.ba.schedule.ui.component.TableCell
-import com.ba.schedule.ui.viewmodel.LecturesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

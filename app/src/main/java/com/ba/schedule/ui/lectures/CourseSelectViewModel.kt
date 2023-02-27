@@ -1,4 +1,4 @@
-package com.ba.schedule.ui.viewmodel
+package com.ba.schedule.ui.lectures
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

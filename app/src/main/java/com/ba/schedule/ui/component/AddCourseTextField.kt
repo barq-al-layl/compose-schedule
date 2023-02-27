@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -22,18 +22,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ba.schedule.R
-import com.ba.schedule.domain.model.AddCourseTextFieldEvent
-import com.ba.schedule.domain.model.AddCourseTextFieldState
+import com.ba.schedule.domain.model.EditCourseTextFieldEvent
+import com.ba.schedule.domain.model.EditCourseTextFieldState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddCourseTextField(
     @StringRes label: Int,
-    state: AddCourseTextFieldState,
-    onEvent: (AddCourseTextFieldEvent) -> Unit,
+    state: EditCourseTextFieldState,
+    focusManager: FocusManager,
+    onEvent: (EditCourseTextFieldEvent) -> Unit,
 ) {
-    val focusManager = LocalFocusManager.current
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -56,7 +55,7 @@ fun AddCourseTextField(
         ) {
             OutlinedTextField(
                 value = state.day,
-                onValueChange = { onEvent(AddCourseTextFieldEvent.DayChange(it)) },
+                onValueChange = { onEvent(EditCourseTextFieldEvent.DayChange(it)) },
                 modifier = Modifier.weight(2f),
                 textStyle = TextStyle(fontSize = 18.sp, textAlign = TextAlign.Center),
                 label = { Text(text = stringResource(id = R.string.dd)) },
@@ -73,7 +72,7 @@ fun AddCourseTextField(
             )
             OutlinedTextField(
                 value = state.month,
-                onValueChange = { onEvent(AddCourseTextFieldEvent.MonthChange(it)) },
+                onValueChange = { onEvent(EditCourseTextFieldEvent.MonthChange(it)) },
                 modifier = Modifier.weight(2f),
                 textStyle = TextStyle(fontSize = 18.sp, textAlign = TextAlign.Center),
                 label = { Text(text = stringResource(id = R.string.mm)) },
@@ -90,7 +89,7 @@ fun AddCourseTextField(
             )
             OutlinedTextField(
                 value = state.year,
-                onValueChange = { onEvent(AddCourseTextFieldEvent.YearChange(it)) },
+                onValueChange = { onEvent(EditCourseTextFieldEvent.YearChange(it)) },
                 modifier = Modifier.weight(3f),
                 textStyle = TextStyle(fontSize = 18.sp, textAlign = TextAlign.Center),
                 label = { Text(text = stringResource(id = R.string.yyyy)) },
@@ -113,7 +112,7 @@ fun AddCourseTextField(
         ) {
             OutlinedTextField(
                 value = state.hour,
-                onValueChange = { onEvent(AddCourseTextFieldEvent.HourChange(it)) },
+                onValueChange = { onEvent(EditCourseTextFieldEvent.HourChange(it)) },
                 modifier = Modifier.weight(2f),
                 textStyle = TextStyle(
                     fontSize = 18.sp,
@@ -134,7 +133,7 @@ fun AddCourseTextField(
             )
             OutlinedTextField(
                 value = state.minute,
-                onValueChange = { onEvent(AddCourseTextFieldEvent.MinuteChange(it)) },
+                onValueChange = { onEvent(EditCourseTextFieldEvent.MinuteChange(it)) },
                 modifier = Modifier.weight(2f),
                 textStyle = TextStyle(fontSize = 18.sp, textAlign = TextAlign.Center),
                 label = { Text(text = stringResource(id = R.string.minute), fontSize = 14.sp) },
@@ -150,7 +149,7 @@ fun AddCourseTextField(
                 shape = MaterialTheme.shapes.large,
             )
             FilledIconButton(
-                onClick = { onEvent(AddCourseTextFieldEvent.Reset) },
+                onClick = { onEvent(EditCourseTextFieldEvent.Reset) },
                 modifier = Modifier
                     .fillMaxHeight()
                     .weight(1f)

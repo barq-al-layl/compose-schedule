@@ -5,7 +5,7 @@ import com.ba.schedule.domain.repository.ExamsRepository
 import com.ba.schedule.domain.usecase.UseCase
 import javax.inject.Inject
 
-class AddExamUseCase @Inject constructor(
+class EditExamUseCase @Inject constructor(
     private val repository: ExamsRepository,
 ) : UseCase<AddExamUseCaseParameter, Unit>() {
     override suspend fun execute(parameters: AddExamUseCaseParameter) {

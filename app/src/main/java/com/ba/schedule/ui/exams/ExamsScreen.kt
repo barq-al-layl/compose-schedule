@@ -1,4 +1,4 @@
-package com.ba.schedule.ui.screen
+package com.ba.schedule.ui.exams
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
@@ -22,7 +22,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ba.schedule.R
 import com.ba.schedule.domain.model.ExamType
 import com.ba.schedule.ui.component.TableCell
-import com.ba.schedule.ui.viewmodel.ExamsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -5,7 +5,7 @@ import com.ba.schedule.domain.repository.CoursesRepository
 import com.ba.schedule.domain.usecase.UseCase
 import javax.inject.Inject
 
-class AddCourseUseCase @Inject constructor(
+class EditCourseUseCase @Inject constructor(
     private val repository: CoursesRepository,
 ) : UseCase<AddCourseParameter, Long>() {
     override suspend fun execute(parameters: AddCourseParameter): Long {

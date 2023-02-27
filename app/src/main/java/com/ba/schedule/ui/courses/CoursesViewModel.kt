@@ -1,4 +1,4 @@
-package com.ba.schedule.ui.viewmodel
+package com.ba.schedule.ui.courses
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CoursesViewModel @Inject constructor(
     getCoursesUseCase: GetCoursesUseCase,
-    private val addCourseUseCase: AddCourseUseCase,
+    private val editCourseUseCase: EditCourseUseCase,
     private val deleteCourseUseCase: DeleteCourseUseCase,
     private val snackbarManager: SnackbarManager,
 ) : ViewModel() {
@@ -61,7 +61,7 @@ class CoursesViewModel @Inject constructor(
                 message = R.string.course_deleted,
                 action = SnackbarAction(R.string.undo) {
                     viewModelScope.launch {
-                        addCourseUseCase(
+                        editCourseUseCase(
                             AddCourseParameter(deletedCourse.removeFirst())
                         )
                     }

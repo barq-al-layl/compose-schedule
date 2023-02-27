@@ -1,6 +1,6 @@
 package com.ba.schedule.domain.model
 
-data class AddCourseTextFieldState(
+data class EditCourseTextFieldState(
     val year: String = "",
     val month: String = "",
     val day: String = "",

@@ -1,11 +1,11 @@
-package com.ba.schedule.ui.viewmodel
+package com.ba.schedule.ui.courses
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ba.schedule.domain.model.*
 import com.ba.schedule.domain.usecase.courses.AddCourseParameter
-import com.ba.schedule.domain.usecase.courses.AddCourseUseCase
+import com.ba.schedule.domain.usecase.courses.EditCourseUseCase
 import com.ba.schedule.domain.usecase.courses.GetCourseByIdParameter
 import com.ba.schedule.domain.usecase.courses.GetCourseByIdUseCase
 import com.ba.schedule.domain.usecase.exams.*
@@ -22,22 +22,22 @@ import java.time.LocalTime
 import javax.inject.Inject
 
 @HiltViewModel
-class AddCourseViewModel @Inject constructor(
+class EditCourseViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getCourseByIdUseCase: GetCourseByIdUseCase,
-    private val addCourseUseCase: AddCourseUseCase,
+    private val editCourseUseCase: EditCourseUseCase,
     private val getExamsForCourseUseCase: GetExamsForCourseUseCase,
-    private val addExamUseCase: AddExamUseCase,
+    private val editExamUseCase: EditExamUseCase,
     private val removeExamUseCase: RemoveExamUseCase,
 ) : ViewModel() {
 
     private val _courseName = MutableStateFlow("")
     val courseName = _courseName.asStateFlow()
 
-    private val _final = MutableStateFlow(AddCourseTextFieldState())
+    private val _final = MutableStateFlow(EditCourseTextFieldState())
     val final = _final.asStateFlow()
 
-    private val _midterm = MutableStateFlow(AddCourseTextFieldState())
+    private val _midterm = MutableStateFlow(EditCourseTextFieldState())
     val midterm = _midterm.asStateFlow()
 
     private val courseId: Int = savedStateHandle[MainDestination.kCourseId]!!
@@ -63,7 +63,7 @@ class AddCourseViewModel @Inject constructor(
         }
     }
 
-    fun onAddCourse(): Boolean {
+    fun onEditCourse(): Boolean {
         val name = courseName.value.trim()
         if (name.isEmpty()) return false
         viewModelScope.launch {
@@ -72,7 +72,7 @@ class AddCourseViewModel @Inject constructor(
                 name = name,
             )
             val courseId =
-                addCourseUseCase(AddCourseParameter(course)).data?.toInt() ?: return@launch
+                editCourseUseCase(AddCourseParameter(course)).data?.toInt() ?: return@launch
             course = course.copy(id = courseId)
             if (final.value.isEmpty()) {
                 finalExam?.let { removeExamUseCase(RemoveExamUseCaseParameter(it)) }
@@ -83,7 +83,7 @@ class AddCourseViewModel @Inject constructor(
                     time = final.value.toTimeString(),
                     type = ExamType.Final,
                 )
-                addExamUseCase(AddExamUseCaseParameter(exam))
+                editExamUseCase(AddExamUseCaseParameter(exam))
             }
             if (midterm.value.isEmpty()) {
                 midtermExam?.let { removeExamUseCase(RemoveExamUseCaseParameter(it)) }
@@ -94,78 +94,78 @@ class AddCourseViewModel @Inject constructor(
                     time = midterm.value.toTimeString(),
                     type = ExamType.Midterm,
                 )
-                addExamUseCase(AddExamUseCaseParameter(exam))
+                editExamUseCase(AddExamUseCaseParameter(exam))
             }
         }
         return true
     }
 
-    fun onNameChange(value: String) {
+    fun onNameChanged(value: String) {
         _courseName.update { value }
     }
 
-    fun onFinalChange(event: AddCourseTextFieldEvent) {
+    fun onFinalChanged(event: EditCourseTextFieldEvent) {
         event.updateFlow(_final)
     }
 
-    fun onMidtermChange(event: AddCourseTextFieldEvent) {
+    fun onMidtermChanged(event: EditCourseTextFieldEvent) {
         event.updateFlow(_midterm)
     }
 
-    private fun AddCourseTextFieldEvent.updateFlow(
-        flow: MutableStateFlow<AddCourseTextFieldState>,
+    private fun EditCourseTextFieldEvent.updateFlow(
+        flow: MutableStateFlow<EditCourseTextFieldState>,
     ) = flow.update {
         when (this) {
-            is AddCourseTextFieldEvent.YearChange -> {
+            is EditCourseTextFieldEvent.YearChange -> {
                 val x = value.toIntOrNull() ?: 0
                 if (x !in 1..2300 && value.isNotEmpty()) return
                 it.copy(year = value)
             }
-            is AddCourseTextFieldEvent.MonthChange -> {
+            is EditCourseTextFieldEvent.MonthChange -> {
                 val x = value.toIntOrNull() ?: 0
                 if (x !in 1..12 && value.isNotEmpty()) return
                 it.copy(month = value)
             }
-            is AddCourseTextFieldEvent.DayChange -> {
+            is EditCourseTextFieldEvent.DayChange -> {
                 val x = value.toIntOrNull() ?: 0
                 if (x !in 1..31 && value.isNotEmpty()) return
                 it.copy(day = value)
             }
-            is AddCourseTextFieldEvent.HourChange -> {
+            is EditCourseTextFieldEvent.HourChange -> {
                 val x = value.toIntOrNull() ?: 0
                 if (x !in 1..12 && value.isNotEmpty()) return
                 it.copy(hour = value)
             }
-            is AddCourseTextFieldEvent.MinuteChange -> {
+            is EditCourseTextFieldEvent.MinuteChange -> {
                 val x = value.toIntOrNull() ?: 0
                 if (x !in 1..59 && value.length > 2) return
                 it.copy(minute = value)
             }
-            AddCourseTextFieldEvent.Reset -> AddCourseTextFieldState()
+            EditCourseTextFieldEvent.Reset -> EditCourseTextFieldState()
         }
     }
 
-    private fun AddCourseTextFieldState.toLocalDate(): LocalDate {
+    private fun EditCourseTextFieldState.toLocalDate(): LocalDate {
         return LocalDate.of(year.toInt(), month.toInt(), day.toInt())
     }
 
-    private fun AddCourseTextFieldState.toTimeString(): LocalTime {
+    private fun EditCourseTextFieldState.toTimeString(): LocalTime {
         var hour = hour.toInt()
         if (hour < 7) hour += 12
         return LocalTime.of(hour, minute.toInt())
     }
 
-    private fun AddCourseTextFieldState.isEmpty(): Boolean {
+    private fun EditCourseTextFieldState.isEmpty(): Boolean {
         return day.isEmpty() || month.isEmpty() || year.isEmpty()
                 || hour.isEmpty() || minute.isEmpty()
     }
 
     private fun LocalDateTime.updateFlow(
-        flow: MutableStateFlow<AddCourseTextFieldState>,
+        flow: MutableStateFlow<EditCourseTextFieldState>,
     ) = flow.update {
         var hour = hour
         if (hour > 12) hour -= 12
-        AddCourseTextFieldState(
+        EditCourseTextFieldState(
             year = year.toString(),
             month = monthValue.toString(),
             day = dayOfMonth.toString(),

@@ -1,4 +1,4 @@
-package com.ba.schedule.ui.screen
+package com.ba.schedule.ui.courses
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -23,12 +23,11 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ba.schedule.R
 import com.ba.schedule.ui.component.AddCourseTextField
-import com.ba.schedule.ui.viewmodel.AddCourseViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddCourseScreen(
-    viewModel: AddCourseViewModel = hiltViewModel(),
+fun EditCourseScreen(
+    viewModel: EditCourseViewModel = hiltViewModel(),
     navigateBack: () -> Unit,
 ) {
     val courseName by viewModel.courseName.collectAsState()
@@ -53,7 +52,7 @@ fun AddCourseScreen(
                 actions = {
                     FilledIconButton(
                         onClick = {
-                            val res = viewModel.onAddCourse()
+                            val res = viewModel.onEditCourse()
                             if (res) navigateBack()
                         },
                         modifier = Modifier.padding(4.dp),
@@ -83,7 +82,7 @@ fun AddCourseScreen(
         ) {
             OutlinedTextField(
                 value = courseName,
-                onValueChange = viewModel::onNameChange,
+                onValueChange = viewModel::onNameChanged,
                 modifier = Modifier.fillMaxWidth(),
                 textStyle = TextStyle(fontSize = 18.sp),
                 label = { Text(text = stringResource(id = R.string.course_name)) },
@@ -99,12 +98,14 @@ fun AddCourseScreen(
             AddCourseTextField(
                 label = R.string.final_,
                 state = final,
-                onEvent = viewModel::onFinalChange,
+                focusManager = focusManager,
+                onEvent = viewModel::onFinalChanged,
             )
             AddCourseTextField(
                 label = R.string.midterm,
                 state = midterm,
-                onEvent = viewModel::onMidtermChange,
+                focusManager = focusManager,
+                onEvent = viewModel::onMidtermChanged,
             )
         }
     }

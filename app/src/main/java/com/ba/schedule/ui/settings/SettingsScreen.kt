@@ -1,4 +1,4 @@
-package com.ba.schedule.ui.screen
+package com.ba.schedule.ui.settings
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
