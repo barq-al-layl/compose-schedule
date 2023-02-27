@@ -1,29 +1,37 @@
 package com.ba.schedule.ui.theme
 
-import android.annotation.SuppressLint
 import android.app.Activity
-import android.os.Build
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.ba.schedule.domain.model.ThemeMode
 
 private val DarkColorScheme = darkColorScheme()
 
 private val LightColorScheme = lightColorScheme()
 
-@SuppressLint("ObsoleteSdkInt")
 @Composable
 fun ScheduleTheme(
-    darkTheme: Boolean = true,
-    dynamicColor: Boolean = true,
+    viewModel: ThemeViewModel = hiltViewModel(),
     content: @Composable () -> Unit,
 ) {
+    val dynamicColor by viewModel.useDynamicColors.collectAsState()
+    val themeMode by viewModel.themeMode.collectAsState()
+    val darkTheme = when(themeMode) {
+        ThemeMode.System -> isSystemInDarkTheme()
+        ThemeMode.Dark -> true
+        ThemeMode.Light -> false
+    }
     val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+        dynamicColor -> {
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }

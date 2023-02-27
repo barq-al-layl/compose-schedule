@@ -1,6 +1,5 @@
-package com.ba.schedule.domain.usecase.exams
+package com.ba.schedule.domain.usecase
 
-import com.ba.schedule.domain.usecase.UseCase
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject

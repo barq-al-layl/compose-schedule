@@ -3,9 +3,11 @@ package com.ba.schedule.di
 import com.ba.schedule.data.repository.DefaultCoursesRepository
 import com.ba.schedule.data.repository.DefaultExamsRepository
 import com.ba.schedule.data.repository.DefaultLecturesRepository
+import com.ba.schedule.data.repository.DefaultSettingsRepository
 import com.ba.schedule.domain.repository.CoursesRepository
 import com.ba.schedule.domain.repository.ExamsRepository
 import com.ba.schedule.domain.repository.LecturesRepository
+import com.ba.schedule.domain.repository.SettingsRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -29,5 +31,10 @@ abstract class RepositoryModule {
     abstract fun bindExamsRepository(
         repository: DefaultExamsRepository,
     ): ExamsRepository
+
+    @Binds
+    abstract fun bindSettingsRepository(
+        repository: DefaultSettingsRepository,
+    ): SettingsRepository
 
 }
