@@ -9,7 +9,10 @@ import com.ba.schedule.domain.repository.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.time.DayOfWeek
 import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
+import java.util.*
 import javax.inject.Inject
 import kotlin.time.toJavaDuration
 
@@ -21,7 +24,14 @@ class LecturesViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val timeFormatter = DateTimeFormatter.ofPattern("h:mm")
-
+    val weekDays = listOf(
+        DayOfWeek.SATURDAY.getDisplayName(TextStyle.FULL, Locale.getDefault()),
+        DayOfWeek.SUNDAY.getDisplayName(TextStyle.FULL, Locale.getDefault()),
+        DayOfWeek.MONDAY.getDisplayName(TextStyle.FULL, Locale.getDefault()),
+        DayOfWeek.TUESDAY.getDisplayName(TextStyle.FULL, Locale.getDefault()),
+        DayOfWeek.WEDNESDAY.getDisplayName(TextStyle.FULL, Locale.getDefault()),
+        DayOfWeek.THURSDAY.getDisplayName(TextStyle.FULL, Locale.getDefault()),
+    )
     val lectureTime = combine(
         settingsRepository.getStartTimeStream(),
         settingsRepository.getLectureDurationStream(),

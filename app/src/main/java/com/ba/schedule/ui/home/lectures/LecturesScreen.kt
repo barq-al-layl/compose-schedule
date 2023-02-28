@@ -23,8 +23,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ba.schedule.R
-import com.ba.schedule.domain.model.Period
-import com.ba.schedule.domain.model.WeekDay
 import com.ba.schedule.ui.component.TableCell
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
@@ -40,8 +38,7 @@ fun LecturesScreen(
     val cellWidth = (configuration.screenWidthDp.dp - tablePadding * 5) / 4
     val cellHeight = configuration.screenHeightDp.dp / 11
 
-    val days = WeekDay.values()
-    val periods = Period.values()
+    val days = viewModel.weekDays
 
     val isLocked by viewModel.isLayoutLocked.collectAsState()
     val lectures by viewModel.lectures.collectAsState()
@@ -134,10 +131,10 @@ fun LecturesScreen(
                         }
                     }
                 }
-                days.forEach { day ->
+                viewModel.weekDays.forEach { day ->
                     TableCell(
                         modifier = Modifier.size(width = cellWidth, height = cellHeight),
-                        content = day.name,
+                        content = day,
                         fontWeight = FontWeight.Medium,
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
                     )

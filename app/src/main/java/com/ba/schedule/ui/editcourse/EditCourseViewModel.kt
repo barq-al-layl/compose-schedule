@@ -3,7 +3,9 @@ package com.ba.schedule.ui.editcourse
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ba.schedule.domain.model.*
+import com.ba.schedule.domain.model.Course
+import com.ba.schedule.domain.model.Exam
+import com.ba.schedule.domain.model.ExamType
 import com.ba.schedule.domain.repository.CoursesRepository
 import com.ba.schedule.domain.repository.ExamsRepository
 import com.ba.schedule.ui.navigation.MainDestination
