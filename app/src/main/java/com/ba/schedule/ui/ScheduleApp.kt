@@ -4,7 +4,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.Composable
@@ -19,7 +18,6 @@ import com.ba.schedule.ui.editcourse.EditCourseScreen
 import com.ba.schedule.ui.navigation.MainDestination
 import com.ba.schedule.ui.navigation.homeSectionNavGraph
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScheduleApp() {
     val appState = rememberScheduleAppState()

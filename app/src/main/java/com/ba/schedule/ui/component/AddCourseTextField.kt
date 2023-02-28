@@ -25,7 +25,6 @@ import com.ba.schedule.R
 import com.ba.schedule.ui.editcourse.EditCourseTextFieldEvent
 import com.ba.schedule.ui.editcourse.EditCourseTextFieldState
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddCourseTextField(
     @StringRes label: Int,
