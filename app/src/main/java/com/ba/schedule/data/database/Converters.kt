@@ -1,7 +1,7 @@
 package com.ba.schedule.data.database
 
 import androidx.room.TypeConverter
-import com.ba.schedule.domain.model.ExamType
+import com.ba.schedule.model.ExamType
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter

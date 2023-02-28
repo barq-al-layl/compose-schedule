@@ -3,11 +3,11 @@ package com.ba.schedule.ui.home.courses
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ba.schedule.R
-import com.ba.schedule.domain.model.Course
-import com.ba.schedule.domain.model.SnackbarAction
-import com.ba.schedule.domain.model.SnackbarManager
-import com.ba.schedule.domain.model.SnackbarMessage
-import com.ba.schedule.domain.repository.CoursesRepository
+import com.ba.schedule.model.Course
+import com.ba.schedule.model.SnackbarAction
+import com.ba.schedule.model.SnackbarManager
+import com.ba.schedule.model.SnackbarMessage
+import com.ba.schedule.data.repository.CoursesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch

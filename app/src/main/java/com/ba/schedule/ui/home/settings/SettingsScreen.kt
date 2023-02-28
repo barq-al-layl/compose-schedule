@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ba.schedule.R
-import com.ba.schedule.domain.model.ThemeMode
+import com.ba.schedule.model.ThemeMode
 import com.ba.schedule.ui.component.LectureDurationDialog
 import com.ba.schedule.ui.component.SettingsListItem
 import com.ba.schedule.ui.component.TimePickerDialog

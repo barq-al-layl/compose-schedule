@@ -1,4 +1,4 @@
-package com.ba.schedule.domain.model
+package com.ba.schedule.model
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow

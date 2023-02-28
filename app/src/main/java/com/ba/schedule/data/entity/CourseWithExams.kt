@@ -2,7 +2,7 @@ package com.ba.schedule.data.entity
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.ba.schedule.domain.model.Exam
+import com.ba.schedule.model.Exam
 
 data class CourseWithExams(
     @Embedded val course: CourseEntity,

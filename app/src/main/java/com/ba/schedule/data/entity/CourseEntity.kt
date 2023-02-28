@@ -2,7 +2,7 @@ package com.ba.schedule.data.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.ba.schedule.domain.model.Course
+import com.ba.schedule.model.Course
 
 @Entity(
     tableName = "courses",

@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ba.schedule.R
-import com.ba.schedule.domain.model.ExamType
+import com.ba.schedule.model.ExamType
 import com.ba.schedule.ui.component.TableCell
 
 @OptIn(ExperimentalMaterial3Api::class)

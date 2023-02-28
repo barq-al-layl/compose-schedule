@@ -2,31 +2,30 @@ package com.ba.schedule.data.repository
 
 import com.ba.schedule.data.database.CoursesDao
 import com.ba.schedule.data.entity.CourseEntity
-import com.ba.schedule.domain.model.Course
-import com.ba.schedule.domain.repository.CoursesRepository
+import com.ba.schedule.model.Course
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class DefaultCoursesRepository @Inject constructor(
+class CoursesRepository @Inject constructor(
     private val dao: CoursesDao,
-) : CoursesRepository {
+) {
 
-    override fun getAll(): Flow<List<Course>> {
+    fun getAll(): Flow<List<Course>> {
         return dao.getAll().map { courses ->
             courses.map { it.toCourse() }
         }
     }
 
-    override suspend fun getById(id: Int): Course? {
+    suspend fun getById(id: Int): Course? {
         return dao.getBy(id)?.toCourse()
     }
 
-    override suspend fun add(course: Course): Long {
+    suspend fun add(course: Course): Long {
         return dao.insert(CourseEntity.fromCourse(course))
     }
 
-    override suspend fun delete(course: Course) {
+    suspend fun delete(course: Course) {
         dao.delete(CourseEntity.fromCourse(course))
     }
 }

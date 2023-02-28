@@ -1,6 +1,6 @@
 package com.ba.schedule.di
 
-import com.ba.schedule.domain.model.SnackbarManager
+import com.ba.schedule.model.SnackbarManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

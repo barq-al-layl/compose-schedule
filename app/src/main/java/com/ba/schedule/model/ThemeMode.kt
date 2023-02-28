@@ -1,4 +1,4 @@
-package com.ba.schedule.domain.model
+package com.ba.schedule.model
 
 enum class ThemeMode {
     System,

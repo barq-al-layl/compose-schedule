@@ -1,8 +1,8 @@
 package com.ba.schedule.data.entity
 
 import androidx.room.Entity
-import com.ba.schedule.domain.model.Exam
-import com.ba.schedule.domain.model.ExamType
+import com.ba.schedule.model.Exam
+import com.ba.schedule.model.ExamType
 import java.time.LocalDate
 import java.time.LocalTime
 

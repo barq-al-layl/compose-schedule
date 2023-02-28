@@ -14,7 +14,7 @@ import androidx.navigation.NavGraph
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.ba.schedule.domain.model.SnackbarManager
+import com.ba.schedule.model.SnackbarManager
 import com.ba.schedule.ui.navigation.HomeSection
 import com.ba.schedule.ui.navigation.MainDestination
 import kotlinx.coroutines.CoroutineScope

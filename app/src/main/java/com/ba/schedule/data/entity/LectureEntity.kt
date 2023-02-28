@@ -1,7 +1,7 @@
 package com.ba.schedule.data.entity
 
 import androidx.room.Entity
-import com.ba.schedule.domain.model.Lecture
+import com.ba.schedule.model.Lecture
 
 @Entity(
     tableName = "lectures",

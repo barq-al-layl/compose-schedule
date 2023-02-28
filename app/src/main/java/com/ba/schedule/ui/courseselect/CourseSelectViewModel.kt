@@ -3,10 +3,10 @@ package com.ba.schedule.ui.courseselect
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ba.schedule.domain.model.Course
-import com.ba.schedule.domain.model.Lecture
-import com.ba.schedule.domain.repository.CoursesRepository
-import com.ba.schedule.domain.repository.LecturesRepository
+import com.ba.schedule.model.Course
+import com.ba.schedule.model.Lecture
+import com.ba.schedule.data.repository.CoursesRepository
+import com.ba.schedule.data.repository.LecturesRepository
 import com.ba.schedule.ui.navigation.MainDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*

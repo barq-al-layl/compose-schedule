@@ -1,4 +1,4 @@
-package com.ba.schedule.domain.model
+package com.ba.schedule.model
 
 import java.time.LocalDate
 import java.time.LocalTime
