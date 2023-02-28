@@ -3,30 +3,26 @@ package com.ba.schedule.ui.home.exams
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ba.schedule.domain.model.ExamType
-import com.ba.schedule.domain.usecase.FormatDateUseCase
-import com.ba.schedule.domain.usecase.FormatDateUseCaseParameter
-import com.ba.schedule.domain.usecase.FormatTimeUseCase
-import com.ba.schedule.domain.usecase.FormatTimeUseCaseParameter
-import com.ba.schedule.domain.usecase.exams.*
-import com.ba.schedule.domain.util.data
+import com.ba.schedule.domain.repository.ExamsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import java.time.LocalDate
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
 class ExamsViewModel @Inject constructor(
-    getExamsUseCase: GetExamsUseCase,
-    formatDateUseCase: FormatDateUseCase,
-    formatTimeUseCase: FormatTimeUseCase,
+    repository: ExamsRepository,
 ) : ViewModel() {
+
+    private val timeFormatter = DateTimeFormatter.ofPattern("h:mm")
+    private val dateFormatter = DateTimeFormatter.ofPattern("uuuu-MM-dd\nEEEE")
 
     private val _examType = MutableStateFlow(ExamType.Final)
     val examType = _examType.asStateFlow()
 
-    val exams = getExamsUseCase(Unit)
-        .mapNotNull { it.data }
+    val exams = repository.getAll()
         .combine(examType) { exams, type ->
             exams.filter { it.type == type }
         }.toStateFlow(emptyList())
@@ -38,9 +34,7 @@ class ExamsViewModel @Inject constructor(
     }.toStateFlow(emptyList())
 
     val formattedTime = localTimes.map {
-        it.mapNotNull { time ->
-            formatTimeUseCase(FormatTimeUseCaseParameter(time)).data
-        }
+        it.map(timeFormatter::format)
     }.toStateFlow(emptyList())
 
     val localDates = exams.map { exams ->
@@ -50,9 +44,7 @@ class ExamsViewModel @Inject constructor(
     }.toStateFlow(emptyList())
 
     val formattedDate = localDates.map {
-        it.mapNotNull { date ->
-            formatDateUseCase(FormatDateUseCaseParameter(date)).data
-        }
+        it.map(dateFormatter::format)
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),

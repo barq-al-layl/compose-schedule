@@ -1,6 +1,6 @@
 package com.ba.schedule.domain.model
 
-enum class ThemeMode() {
+enum class ThemeMode {
     System,
     Dark,
     Light,

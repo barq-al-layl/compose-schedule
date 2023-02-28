@@ -4,12 +4,15 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.LockOpen
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -43,6 +46,7 @@ fun LecturesScreen(
     val isLocked by viewModel.isLayoutLocked.collectAsState()
     val lectures by viewModel.lectures.collectAsState()
     val selectedLectures by viewModel.selectedLectures.collectAsState()
+    val lectureTime by viewModel.lectureTime.collectAsState()
 
     val isRemoveVisible by viewModel.isRemoveVisible.collectAsState()
 
@@ -142,19 +146,19 @@ fun LecturesScreen(
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(tablePadding),
             ) {
-                items(count = periods.count()) { time ->
+                itemsIndexed(lectureTime) { timeIndex, time ->
                     Column(verticalArrangement = Arrangement.spacedBy(tablePadding)) {
                         TableCell(
                             modifier = Modifier.size(
                                 width = cellWidth,
                                 height = cellHeight,
                             ),
-                            content = periods[time].label,
+                            content = "${time.start} - ${time.end}",
                             fontWeight = FontWeight.Medium,
                             containerColor = MaterialTheme.colorScheme.tertiaryContainer,
                         )
                         repeat(days.count()) { day ->
-                            val lecture = lectures.find { day == it.day && time == it.time }
+                            val lecture = lectures.find { day == it.day && timeIndex == it.time }
                             val isSelected = lecture in selectedLectures
                             TableCell(
                                 modifier = Modifier
@@ -165,7 +169,7 @@ fun LecturesScreen(
                                 isSelected = isSelected,
                                 onClick = {
                                     if (isRemoveVisible) viewModel.onSelectLecture(lecture)
-                                    else onLectureClick(day, time)
+                                    else onLectureClick(day, timeIndex)
                                 },
                                 onLongClick = { viewModel.onSelectLecture(lecture) },
                             )

@@ -1,4 +1,4 @@
-package com.ba.schedule.domain.model
+package com.ba.schedule.ui.editcourse
 
 data class EditCourseTextFieldState(
     val year: String = "",

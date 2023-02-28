@@ -3,37 +3,59 @@ package com.ba.schedule.ui.home.lectures
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ba.schedule.R
-import com.ba.schedule.domain.model.Lecture
-import com.ba.schedule.domain.model.SnackbarAction
-import com.ba.schedule.domain.model.SnackbarManager
-import com.ba.schedule.domain.model.SnackbarMessage
-import com.ba.schedule.domain.usecase.lectures.*
-import com.ba.schedule.domain.util.data
+import com.ba.schedule.domain.model.*
+import com.ba.schedule.domain.repository.LecturesRepository
+import com.ba.schedule.domain.repository.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
+import kotlin.time.toJavaDuration
 
 @HiltViewModel
 class LecturesViewModel @Inject constructor(
-    getLecturesUseCase: GetLecturesUseCase,
-    private val addLectureUseCase: AddLectureUseCase,
-    private val removeLectureUseCase: RemoveLectureUseCase,
+    settingsRepository: SettingsRepository,
+    private val lecturesRepository: LecturesRepository,
     private val snackbarManager: SnackbarManager,
 ) : ViewModel() {
+
+    private val timeFormatter = DateTimeFormatter.ofPattern("h:mm")
+
+    val lectureTime = combine(
+        settingsRepository.getStartTimeStream(),
+        settingsRepository.getLectureDurationStream(),
+        settingsRepository.getTotalLecturesStream(),
+    ) { localTime, duration, total ->
+        val javaDuration = duration.toJavaDuration()
+        var startTime = localTime
+        var endTime = startTime + javaDuration
+        val res = mutableListOf<LectureTime>()
+        for (i in 0 until total) {
+            res += LectureTime(
+                start = timeFormatter.format(startTime),
+                end = timeFormatter.format(endTime),
+            )
+            startTime = endTime
+            endTime += javaDuration
+        }
+        res.toList()
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = emptyList(),
+    )
 
     private val _isLayoutLocked = MutableStateFlow(true)
     val isLayoutLocked = _isLayoutLocked.asStateFlow()
 
-    val lectures = getLecturesUseCase(Unit)
-        .mapNotNull { it.data }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList(),
-        )
+    val lectures = lecturesRepository.getAll().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = emptyList(),
+    )
 
-    private val _selectedLectures = MutableStateFlow(listOf<Lecture>())
+    private val _selectedLectures = MutableStateFlow(emptyList<Lecture>())
     val selectedLectures = _selectedLectures.asStateFlow()
 
     val isRemoveVisible = selectedLectures.map { it.isNotEmpty() }.stateIn(
@@ -56,7 +78,7 @@ class LecturesViewModel @Inject constructor(
                 compareBy(Lecture::day, Lecture::time)
             )
             removedLecture.forEach {
-                removeLectureUseCase(RemoveLectureParameter(it))
+                lecturesRepository.remove(it)
             }
             _selectedLectures.update { emptyList() }
             val message = SnackbarMessage(
@@ -66,7 +88,7 @@ class LecturesViewModel @Inject constructor(
                     perform = {
                         viewModelScope.launch action@{
                             removedLecture.forEach {
-                                addLectureUseCase(AddLectureParameter(it))
+                                lecturesRepository.add(it)
                             }
                         }
                     }

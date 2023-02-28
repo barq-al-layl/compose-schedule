@@ -4,12 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ba.schedule.domain.model.*
-import com.ba.schedule.domain.usecase.courses.AddCourseParameter
-import com.ba.schedule.domain.usecase.courses.EditCourseUseCase
-import com.ba.schedule.domain.usecase.courses.GetCourseByIdParameter
-import com.ba.schedule.domain.usecase.courses.GetCourseByIdUseCase
-import com.ba.schedule.domain.usecase.exams.*
-import com.ba.schedule.domain.util.data
+import com.ba.schedule.domain.repository.CoursesRepository
+import com.ba.schedule.domain.repository.ExamsRepository
 import com.ba.schedule.ui.navigation.MainDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,11 +20,8 @@ import javax.inject.Inject
 @HiltViewModel
 class EditCourseViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val getCourseByIdUseCase: GetCourseByIdUseCase,
-    private val editCourseUseCase: EditCourseUseCase,
-    private val getExamsForCourseUseCase: GetExamsForCourseUseCase,
-    private val editExamUseCase: EditExamUseCase,
-    private val removeExamUseCase: RemoveExamUseCase,
+    private val coursesRepository: CoursesRepository,
+    private val examsRepository: ExamsRepository,
 ) : ViewModel() {
 
     private val _courseName = MutableStateFlow("")
@@ -47,11 +40,9 @@ class EditCourseViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val course = getCourseByIdUseCase(GetCourseByIdParameter(courseId))
-                .data ?: return@launch
+            val course = coursesRepository.getById(courseId) ?: return@launch
             _courseName.update { course.name }
-            val exams = getExamsForCourseUseCase(GetExamsForCourseUseCaseParameter(course))
-                .data ?: return@launch
+            val exams = examsRepository.getById(courseId)
             exams.find { it.type == ExamType.Final }?.let {
                 finalExam = it
                 LocalDateTime.of(it.date, it.time).updateFlow(_final)
@@ -71,11 +62,10 @@ class EditCourseViewModel @Inject constructor(
                 id = courseId.takeIf { it != -1 },
                 name = name,
             )
-            val courseId =
-                editCourseUseCase(AddCourseParameter(course)).data?.toInt() ?: return@launch
+            val courseId = coursesRepository.add(course).toInt()
             course = course.copy(id = courseId)
             if (final.value.isEmpty()) {
-                finalExam?.let { removeExamUseCase(RemoveExamUseCaseParameter(it)) }
+                finalExam?.let { examsRepository.remove(it) }
             } else {
                 val exam = Exam(
                     course = course,
@@ -83,10 +73,10 @@ class EditCourseViewModel @Inject constructor(
                     time = final.value.toTimeString(),
                     type = ExamType.Final,
                 )
-                editExamUseCase(AddExamUseCaseParameter(exam))
+                examsRepository.add(exam)
             }
             if (midterm.value.isEmpty()) {
-                midtermExam?.let { removeExamUseCase(RemoveExamUseCaseParameter(it)) }
+                midtermExam?.let { examsRepository.remove(it) }
             } else {
                 val exam = Exam(
                     course = course,
@@ -94,7 +84,7 @@ class EditCourseViewModel @Inject constructor(
                     time = midterm.value.toTimeString(),
                     type = ExamType.Midterm,
                 )
-                editExamUseCase(AddExamUseCaseParameter(exam))
+                examsRepository.add(exam)
             }
         }
         return true

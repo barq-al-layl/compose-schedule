@@ -25,7 +25,7 @@ fun ScheduleTheme(
 ) {
     val dynamicColor by viewModel.useDynamicColors.collectAsState()
     val themeMode by viewModel.themeMode.collectAsState()
-    val darkTheme = when(themeMode) {
+    val darkTheme = when (themeMode) {
         ThemeMode.System -> isSystemInDarkTheme()
         ThemeMode.Dark -> true
         ThemeMode.Light -> false

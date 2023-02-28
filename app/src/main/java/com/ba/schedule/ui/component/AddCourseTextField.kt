@@ -22,8 +22,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ba.schedule.R
-import com.ba.schedule.domain.model.EditCourseTextFieldEvent
-import com.ba.schedule.domain.model.EditCourseTextFieldState
+import com.ba.schedule.ui.editcourse.EditCourseTextFieldEvent
+import com.ba.schedule.ui.editcourse.EditCourseTextFieldState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
