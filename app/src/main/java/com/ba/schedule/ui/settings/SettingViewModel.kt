@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalTime
 import javax.inject.Inject
-import kotlin.time.DurationUnit
+import kotlin.time.Duration.Companion.minutes
 
 @HiltViewModel
 class SettingViewModel @Inject constructor(
@@ -29,7 +29,7 @@ class SettingViewModel @Inject constructor(
     val totalLectures = repository.getTotalLecturesStream().toStateFlow(5)
     val startTime = repository.getStartTimeStream().toStateFlow(LocalTime.of(8, 0))
     val lectureDuration = repository.getLectureDurationStream().map {
-        it.toString(DurationUnit.MINUTES)
+        it.inWholeMinutes.toString()
     }.toStateFlow("120")
 
     fun onThemeModeChanged(mode: ThemeMode) {
@@ -55,6 +55,14 @@ class SettingViewModel @Inject constructor(
         viewModelScope.launch {
             repository.setTotalLectures(value)
         }
+    }
+
+    fun onLectureDurationChanged(value: String): Boolean {
+        if (value.isEmpty()) return false
+        viewModelScope.launch {
+            repository.setLectureDuration(value.toInt().minutes)
+        }
+        return true
     }
 
     private fun <T> Flow<T>.toStateFlow(initialValue: T) = stateIn(

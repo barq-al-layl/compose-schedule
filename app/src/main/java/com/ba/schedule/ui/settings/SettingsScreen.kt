@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ba.schedule.R
 import com.ba.schedule.domain.model.ThemeMode
+import com.ba.schedule.ui.component.LectureDurationDialog
 import com.ba.schedule.ui.component.SettingsListItem
 import com.ba.schedule.ui.component.TimePickerDialog
 import java.time.format.DateTimeFormatter
@@ -29,6 +30,7 @@ fun SettingsScreen(viewModel: SettingViewModel = hiltViewModel()) {
 
     var isMenuExpanded by remember { mutableStateOf(false) }
     var isTimePickerDialogVisible by remember { mutableStateOf(false) }
+    var isLectureDurationDialogVisible by remember { mutableStateOf(false) }
 
     val lecturesPerDayOptions = List(6) { "${it + 1}" }
     var isLecturesPerDayExpanded by remember { mutableStateOf(false) }
@@ -54,7 +56,7 @@ fun SettingsScreen(viewModel: SettingViewModel = hiltViewModel()) {
         ) {
             SettingsListItem("Theme mode") {
                 Box {
-                    TextButton(onClick = { isMenuExpanded = !isMenuExpanded }) {
+                    TextButton(onClick = { isMenuExpanded = true }) {
                         Text(text = themeMode.name)
                     }
                     DropdownMenu(
@@ -89,7 +91,7 @@ fun SettingsScreen(viewModel: SettingViewModel = hiltViewModel()) {
             Divider()
             SettingsListItem("Lectures per day") {
                 Box {
-                    TextButton(onClick = { isLecturesPerDayExpanded = !isLecturesPerDayExpanded }) {
+                    TextButton(onClick = { isLecturesPerDayExpanded = true }) {
                         Text(
                             text = "$lecturesPerDay",
                             fontSize = 18.sp,
@@ -131,7 +133,7 @@ fun SettingsScreen(viewModel: SettingViewModel = hiltViewModel()) {
             }
             Divider()
             SettingsListItem("Lecture duration in minutes") {
-                TextButton(onClick = {  }) {
+                TextButton(onClick = { isLectureDurationDialogVisible = true }) {
                     Text(
                         text = lectureDuration
                     )
@@ -149,5 +151,14 @@ fun SettingsScreen(viewModel: SettingViewModel = hiltViewModel()) {
             viewModel.onStartTimeChanged(timePickerState.hour, timePickerState.minute)
             isTimePickerDialogVisible = false
         },
+    )
+    LectureDurationDialog(
+        visible = isLectureDurationDialogVisible,
+        initialValue = lectureDuration,
+        onCancel = { isLectureDurationDialogVisible = false },
+        onConfirm = {
+            val res = viewModel.onLectureDurationChanged(it)
+            isLectureDurationDialogVisible = !res
+        }
     )
 }
