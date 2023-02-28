@@ -1,4 +1,4 @@
-package com.ba.schedule.ui.settings
+package com.ba.schedule.ui.home.settings
 
 import android.annotation.SuppressLint
 import android.os.Build

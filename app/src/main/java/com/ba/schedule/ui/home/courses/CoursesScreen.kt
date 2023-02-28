@@ -1,4 +1,4 @@
-package com.ba.schedule.ui.courses
+package com.ba.schedule.ui.home.courses
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically

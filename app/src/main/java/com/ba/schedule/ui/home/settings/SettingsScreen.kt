@@ -1,4 +1,4 @@
-package com.ba.schedule.ui.settings
+package com.ba.schedule.ui.home.settings
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState

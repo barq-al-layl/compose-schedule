@@ -1,4 +1,4 @@
-package com.ba.schedule.ui.courses
+package com.ba.schedule.ui.home.courses
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

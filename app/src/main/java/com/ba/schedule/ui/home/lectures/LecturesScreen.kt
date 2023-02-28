@@ -1,4 +1,4 @@
-package com.ba.schedule.ui.lectures
+package com.ba.schedule.ui.home.lectures
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*

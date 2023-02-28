@@ -14,8 +14,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.ba.schedule.ui.component.ScheduleBottomBar
-import com.ba.schedule.ui.courses.EditCourseScreen
-import com.ba.schedule.ui.lectures.CourseSelectScreen
+import com.ba.schedule.ui.editcourse.EditCourseScreen
+import com.ba.schedule.ui.courseselect.CourseSelectScreen
 import com.ba.schedule.ui.navigation.MainDestination
 import com.ba.schedule.ui.navigation.homeSectionNavGraph
 

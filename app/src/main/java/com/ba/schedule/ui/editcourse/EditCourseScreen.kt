@@ -1,4 +1,4 @@
-package com.ba.schedule.ui.courses
+package com.ba.schedule.ui.editcourse
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
