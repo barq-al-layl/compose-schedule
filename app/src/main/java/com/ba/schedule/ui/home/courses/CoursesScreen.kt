@@ -14,6 +14,7 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -99,29 +100,35 @@ fun CoursesScreen(
             }
         },
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier.padding(innerPadding),
-            contentPadding = PaddingValues(
-                start = 16.dp,
-                top = 16.dp,
-                end = 16.dp,
-                bottom = 96.dp,
-            ),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            items(
-                items = courses,
-                key = { it.id!! },
+        if (courses.isEmpty()) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text(text = stringResource(id = R.string.nothing_to_show), fontSize = 20.sp)
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier.padding(innerPadding),
+                contentPadding = PaddingValues(
+                    start = 16.dp,
+                    top = 16.dp,
+                    end = 16.dp,
+                    bottom = 96.dp,
+                ),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                CourseCard(
-                    item = it,
-                    width = screenWidth,
-                    expanded = expandedItem == it.id,
-                    onClick = { viewModel.onExpandItem(it.id!!) },
-                    onEdit = { navigateToAddCourse(it.id!!) },
-                    onDelete = { viewModel.onDeleteCourse(it) },
-                    modifier = Modifier.animateItemPlacement()
-                )
+                items(
+                    items = courses,
+                    key = { it.id!! },
+                ) {
+                    CourseCard(
+                        item = it,
+                        width = screenWidth,
+                        expanded = expandedItem == it.id,
+                        onClick = { viewModel.onExpandItem(it.id!!) },
+                        onEdit = { navigateToAddCourse(it.id!!) },
+                        onDelete = { viewModel.onDeleteCourse(it) },
+                        modifier = Modifier.animateItemPlacement()
+                    )
+                }
             }
         }
     }

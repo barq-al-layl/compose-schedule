@@ -84,83 +84,87 @@ fun EventsScreen(
                 .padding(innerPadding),
             contentAlignment = Alignment.Center,
         ) {
-            Row(
-                modifier = Modifier.padding(tablePadding),
-                horizontalArrangement = Arrangement.spacedBy(tablePadding),
-            ) {
-                Column(
-                    modifier = Modifier.width(cellWidth),
-                    verticalArrangement = Arrangement.spacedBy(tablePadding),
+            if (exams.isEmpty()) {
+                Text(text = stringResource(id = R.string.nothing_to_show), fontSize = 20.sp)
+            } else {
+                Row(
+                    modifier = Modifier.padding(tablePadding),
+                    horizontalArrangement = Arrangement.spacedBy(tablePadding),
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .height(cellHeight)
-                            .fillMaxWidth(),
-                        contentAlignment = Alignment.Center,
+                    Column(
+                        modifier = Modifier.width(cellWidth),
+                        verticalArrangement = Arrangement.spacedBy(tablePadding),
                     ) {
-                        Text(
-                            text = stringResource(
-                                id = when (examType) {
-                                    ExamType.Final -> R.string.final_
-                                    ExamType.Midterm -> R.string.midterm
-                                }
-                            ),
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Medium,
-                            textAlign = TextAlign.Center,
-                        )
-                    }
-                    formattedDate.forEach {
-                        TableCell(
-                            content = it,
+                        Box(
                             modifier = Modifier
                                 .height(cellHeight)
                                 .fillMaxWidth(),
-                            containerColor = MaterialTheme.colorScheme.primaryContainer,
-                            fontWeight = FontWeight.Medium,
-                        )
-                    }
-                }
-                LazyRow(
-                    modifier = Modifier.clip(MaterialTheme.shapes.small),
-                    horizontalArrangement = Arrangement.spacedBy(tablePadding),
-                ) {
-                    itemsIndexed(localTimes) { index, time ->
-                        Column(
-                            modifier = Modifier.width(cellWidth),
-                            verticalArrangement = Arrangement.spacedBy(tablePadding),
+                            contentAlignment = Alignment.Center,
                         ) {
+                            Text(
+                                text = stringResource(
+                                    id = when (examType) {
+                                        ExamType.Final -> R.string.final_
+                                        ExamType.Midterm -> R.string.midterm
+                                    }
+                                ),
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Medium,
+                                textAlign = TextAlign.Center,
+                            )
+                        }
+                        formattedDate.forEach {
                             TableCell(
-                                content = formattedTime[index],
+                                content = it,
                                 modifier = Modifier
                                     .height(cellHeight)
                                     .fillMaxWidth(),
-                                containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                                containerColor = MaterialTheme.colorScheme.primaryContainer,
                                 fontWeight = FontWeight.Medium,
                             )
-                            localDates.forEach { date ->
-                                val exam = exams.filter { date == it.date && it.time == time }
-                                if (exam.isNotEmpty()) {
-                                    Column(
-                                        modifier = Modifier.height(cellHeight),
-                                        verticalArrangement = Arrangement.spacedBy(tablePadding),
-                                    ) {
-                                        exam.forEach {
-                                            TableCell(
-                                                content = it.course?.name ?: "",
-                                                modifier = Modifier
-                                                    .weight(1f)
-                                                    .fillMaxWidth(),
-                                            )
+                        }
+                    }
+                    LazyRow(
+                        modifier = Modifier.clip(MaterialTheme.shapes.small),
+                        horizontalArrangement = Arrangement.spacedBy(tablePadding),
+                    ) {
+                        itemsIndexed(localTimes) { index, time ->
+                            Column(
+                                modifier = Modifier.width(cellWidth),
+                                verticalArrangement = Arrangement.spacedBy(tablePadding),
+                            ) {
+                                TableCell(
+                                    content = formattedTime[index],
+                                    modifier = Modifier
+                                        .height(cellHeight)
+                                        .fillMaxWidth(),
+                                    containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                                    fontWeight = FontWeight.Medium,
+                                )
+                                localDates.forEach { date ->
+                                    val exam = exams.filter { date == it.date && it.time == time }
+                                    if (exam.isNotEmpty()) {
+                                        Column(
+                                            modifier = Modifier.height(cellHeight),
+                                            verticalArrangement = Arrangement.spacedBy(tablePadding),
+                                        ) {
+                                            exam.forEach {
+                                                TableCell(
+                                                    content = it.course?.name ?: "",
+                                                    modifier = Modifier
+                                                        .weight(1f)
+                                                        .fillMaxWidth(),
+                                                )
+                                            }
                                         }
+                                    } else {
+                                        TableCell(
+                                            content = "",
+                                            modifier = Modifier
+                                                .height(cellHeight)
+                                                .fillMaxWidth(),
+                                        )
                                     }
-                                } else {
-                                    TableCell(
-                                        content = "",
-                                        modifier = Modifier
-                                            .height(cellHeight)
-                                            .fillMaxWidth(),
-                                    )
                                 }
                             }
                         }

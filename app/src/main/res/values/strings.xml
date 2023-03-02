@@ -16,8 +16,8 @@
     <string name="dd">DD</string>
     <string name="mm">MM</string>
     <string name="yyyy">YYYY</string>
-    <string name="hour">HOUR</string>
-    <string name="minute">MINUTE</string>
+    <string name="hour">Hour</string>
+    <string name="minute">Minute</string>
 
     <string name="undo">Undo</string>
     <string name="restore">Restore</string>
@@ -39,6 +39,7 @@
     <string name="lecture_duration">Lecture Duration</string>
     <string name="start_time">Start Time</string>
     <string name="lecture_duration_in_minutes">Lecture Duration In Minutes</string>
+    <string name="nothing_to_show">Nothing To Show :(</string>
 
 
 </resources>

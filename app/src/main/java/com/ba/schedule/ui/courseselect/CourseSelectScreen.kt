@@ -57,54 +57,60 @@ fun CourseSelectScreen(
             )
         }
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier.padding(innerPadding),
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            items(items = courses, key = { it.id!! }) {
-                val isSelected = it == selectedCourse
-                val animatedCardWidth by animateDpAsState(
-                    targetValue = if (isSelected) cardWith * .7f else cardWith,
-                )
-                Row(
-                    modifier = Modifier.height(IntrinsicSize.Max),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .width(animatedCardWidth)
-                            .clip(MaterialTheme.shapes.large)
-                            .background(MaterialTheme.colorScheme.secondaryContainer)
-                            .clickable { viewModel.onItemSelect(it) }
-                            .padding(horizontal = 16.dp, vertical = 10.dp),
-                        contentAlignment = Alignment.CenterStart,
+        if (courses.isEmpty()) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text(text = stringResource(id = R.string.nothing_to_show), fontSize = 20.sp)
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier.padding(innerPadding),
+                contentPadding = PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                items(items = courses, key = { it.id!! }) {
+                    val isSelected = it == selectedCourse
+                    val animatedCardWidth by animateDpAsState(
+                        targetValue = if (isSelected) cardWith * .7f else cardWith,
+                    )
+                    Row(
+                        modifier = Modifier.height(IntrinsicSize.Max),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Text(
-                            text = it.name,
-                            fontSize = 20.sp,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                    }
-                    FilledIconButton(
-                        onClick = {
-                            viewModel.onAddLecture()
-                            navigateBack()
-                        },
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxHeight(),
-                        colors = IconButtonDefaults.filledIconButtonColors(
-                            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                        ),
-                    ) {
-                        Icon(
-                            imageVector = Icons.Rounded.Done,
-                            contentDescription = null,
-                            modifier = Modifier.size(32.dp),
-                        )
+                        Box(
+                            modifier = Modifier
+                                .width(animatedCardWidth)
+                                .clip(MaterialTheme.shapes.large)
+                                .background(MaterialTheme.colorScheme.secondaryContainer)
+                                .clickable { viewModel.onItemSelect(it) }
+                                .padding(horizontal = 16.dp, vertical = 10.dp),
+                            contentAlignment = Alignment.CenterStart,
+                        ) {
+                            Text(
+                                text = it.name,
+                                fontSize = 20.sp,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                        }
+                        FilledIconButton(
+                            onClick = {
+                                viewModel.onAddLecture()
+                                navigateBack()
+                            },
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxHeight(),
+                            colors = IconButtonDefaults.filledIconButtonColors(
+                                containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                            ),
+                        ) {
+                            Icon(
+                                imageVector = Icons.Rounded.Done,
+                                contentDescription = null,
+                                modifier = Modifier.size(32.dp),
+                            )
+                        }
                     }
                 }
             }

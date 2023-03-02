@@ -1,4 +1,6 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
+    ExperimentalMaterial3Api::class
+)
 
 package com.ba.schedule.ui.home.settings
 
@@ -176,7 +178,7 @@ fun SettingsScreen(viewModel: SettingViewModel = hiltViewModel()) {
 
                     TextButton(onClick = { isLectureDurationDialogVisible = true }) {
                         Text(
-                            text = lectureDuration
+                            text = "$lectureDuration ${stringResource(id = R.string.minute)}"
                         )
                     }
                 }
