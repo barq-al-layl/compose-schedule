@@ -1,8 +1,6 @@
 package com.ba.schedule.ui.component
 
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
@@ -12,13 +10,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ba.schedule.model.Course
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CourseCard(
     item: Course,
@@ -38,20 +36,17 @@ fun CourseCard(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Box(
-            modifier = Modifier
-                .width(cardWidth)
-                .clip(MaterialTheme.shapes.large)
-                .background(MaterialTheme.colorScheme.secondaryContainer)
-                .clickable { onClick() }
-                .padding(horizontal = 16.dp, vertical = 8.dp),
-            contentAlignment = Alignment.CenterStart,
+        ElevatedCard(
+            modifier = Modifier.width(cardWidth),
+            shape = MaterialTheme.shapes.large,
+            onClick = onClick,
         ) {
             Text(
                 text = item.name,
                 fontSize = 22.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
             )
         }
         Row(

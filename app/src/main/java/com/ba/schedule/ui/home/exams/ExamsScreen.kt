@@ -1,17 +1,22 @@
 package com.ba.schedule.ui.home.exams
 
-import androidx.compose.animation.core.*
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.*
+import androidx.compose.material.icons.rounded.SwapHoriz
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -23,7 +28,7 @@ import com.ba.schedule.R
 import com.ba.schedule.model.ExamType
 import com.ba.schedule.ui.component.TableCell
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
 fun EventsScreen(
     viewModel: ExamsViewModel = hiltViewModel(),
@@ -50,29 +55,6 @@ fun EventsScreen(
             stiffness = Spring.StiffnessLow,
         )
     )
-
-    val tableAngel by animateFloatAsState(
-        targetValue = if (examType == ExamType.Final) 0f else 360f,
-        animationSpec = spring(
-            stiffness = Spring.StiffnessLow
-        ),
-    )
-
-    val tableScale = remember { Animatable(1f) }
-    LaunchedEffect(examType) {
-        tableScale.animateTo(
-            targetValue = .4f,
-            animationSpec = spring(
-                stiffness = Spring.StiffnessLow
-            ),
-        )
-        tableScale.animateTo(
-            targetValue = 1f,
-            animationSpec = spring(
-                stiffness = Spring.StiffnessLow
-            ),
-        )
-    }
 
     Scaffold(
         topBar = {
@@ -103,10 +85,7 @@ fun EventsScreen(
             contentAlignment = Alignment.Center,
         ) {
             Row(
-                modifier = Modifier
-                    .padding(tablePadding)
-                    .rotate(tableAngel)
-                    .scale(tableScale.value),
+                modifier = Modifier.padding(tablePadding),
                 horizontalArrangement = Arrangement.spacedBy(tablePadding),
             ) {
                 Column(
@@ -143,6 +122,7 @@ fun EventsScreen(
                     }
                 }
                 LazyRow(
+                    modifier = Modifier.clip(MaterialTheme.shapes.small),
                     horizontalArrangement = Arrangement.spacedBy(tablePadding),
                 ) {
                     itemsIndexed(localTimes) { index, time ->

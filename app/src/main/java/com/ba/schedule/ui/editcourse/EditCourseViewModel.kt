@@ -3,11 +3,11 @@ package com.ba.schedule.ui.editcourse
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ba.schedule.data.repository.CoursesRepository
+import com.ba.schedule.data.repository.ExamsRepository
 import com.ba.schedule.model.Course
 import com.ba.schedule.model.Exam
 import com.ba.schedule.model.ExamType
-import com.ba.schedule.data.repository.CoursesRepository
-import com.ba.schedule.data.repository.ExamsRepository
 import com.ba.schedule.ui.navigation.MainDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

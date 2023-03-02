@@ -2,8 +2,8 @@ package com.ba.schedule.ui.home.exams
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ba.schedule.model.ExamType
 import com.ba.schedule.data.repository.ExamsRepository
+import com.ba.schedule.model.ExamType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import java.time.LocalDate

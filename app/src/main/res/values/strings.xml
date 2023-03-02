@@ -6,15 +6,6 @@
     <string name="exams">Exams</string>
     <string name="settings">Settings</string>
 
-    <string-array name="days">
-        <item>Saturday</item>
-        <item>Sunday</item>
-        <item>Monday</item>
-        <item>Tuesday</item>
-        <item>Wednesday</item>
-        <item>Thursday</item>
-    </string-array>
-
     <string name="select_course">Select Course</string>
     <string name="search">Search</string>
     <string name="add_course">Add Course</string>
@@ -32,5 +23,22 @@
     <string name="restore">Restore</string>
     <string name="lectures_removed">Lecture(s) removed!</string>
     <string name="course_deleted">Course deleted!</string>
+
+    <string name="system">System</string>
+    <string name="dark">Dark</string>
+    <string name="light">Light</string>
+
+    <string name="cancel">Cancel</string>
+    <string name="accept">Accept</string>
+
+    <string name="default_theme">Default Theme</string>
+    <string name="change_theme">Change Theme</string>
+
+    <string name="dynamic_colors">Dynamic Colors (Android 12+)</string>
+    <string name="lectures_per_day">Lectures Per Day</string>
+    <string name="lecture_duration">Lecture Duration</string>
+    <string name="start_time">Start Time</string>
+    <string name="lecture_duration_in_minutes">Lecture Duration In Minutes</string>
+
 
 </resources>

@@ -3,16 +3,23 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
-    id 'kotlin-parcelize'
 }
 
 android {
+    signingConfigs {
+        test {
+            storeFile file('/home/phoenix/Android/test_keystore.jks')
+            storePassword 'test1234'
+            keyAlias 'test'
+            keyPassword 'test1234'
+        }
+    }
     namespace 'com.ba.schedule'
     compileSdk 33
 
     defaultConfig {
         applicationId "com.ba.schedule"
-        minSdk 31
+        minSdk 26
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -21,6 +28,7 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+        signingConfig signingConfigs.test
     }
 
     buildTypes {
@@ -74,8 +82,8 @@ dependencies {
     implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
 
     // dependency injection
-    implementation "com.google.dagger:hilt-android:2.44"
-    kapt "com.google.dagger:hilt-compiler:2.44"
+    implementation "com.google.dagger:hilt-android:2.45"
+    kapt "com.google.dagger:hilt-compiler:2.45"
 
     // room database
     def room_version = "2.5.0"
@@ -84,4 +92,6 @@ dependencies {
 
     // datastore
     implementation "androidx.datastore:datastore-preferences:1.0.0"
+
+    implementation "com.google.accompanist:accompanist-systemuicontroller:0.29.1-alpha"
 }

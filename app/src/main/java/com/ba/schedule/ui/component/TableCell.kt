@@ -45,9 +45,10 @@ fun TableCell(
             else -> emptyContainerColor.copy(alpha = .2f)
         }
     )
+
     Box(
         modifier = modifier
-            .clip(MaterialTheme.shapes.medium)
+            .clip(MaterialTheme.shapes.small)
             .background(color = backgroundColor)
             .combinedClickable(
                 enabled = enabled,
@@ -58,6 +59,7 @@ fun TableCell(
             .padding(all = 4.dp),
         contentAlignment = Alignment.Center,
     ) {
+
         AnimatedVisibility(
             visible = isNotEmpty,
             enter = scaleIn(),

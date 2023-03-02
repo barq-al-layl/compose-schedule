@@ -3,9 +3,9 @@ package com.ba.schedule.ui.home.lectures
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ba.schedule.R
-import com.ba.schedule.model.*
 import com.ba.schedule.data.repository.LecturesRepository
 import com.ba.schedule.data.repository.SettingsRepository
+import com.ba.schedule.model.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch

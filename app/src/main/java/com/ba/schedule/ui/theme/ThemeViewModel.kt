@@ -4,8 +4,8 @@ import android.annotation.SuppressLint
 import android.os.Build
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ba.schedule.model.ThemeMode
 import com.ba.schedule.data.repository.SettingsRepository
+import com.ba.schedule.model.ThemeMode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
