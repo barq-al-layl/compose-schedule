@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Schedule</string>
+    <string name="lectures">المحاضرات</string>
+    <string name="courses">المقرارات</string>
+    <string name="exams">الإمتحانات</string>
+    <string name="settings">الإعدادات</string>
+    <string name="select_course">اختيار مقرر</string>
+    <string name="search">البحث</string>
+    <string name="add_course">إضافة مقرر</string>
+    <string name="course_name">اسم المقرر</string>
+    <string name="midterm">نصفي</string>
+    <string name="final_">نهائي</string>
+    <string name="dd">يوم</string>
+    <string name="mm">شهر</string>
+    <string name="yyyy">سنة</string>
+    <string name="hour">ساعة</string>
+    <string name="minute">دقيقة</string>
+    <string name="undo">التراجع</string>
+    <string name="restore">استعادة</string>
+    <string name="lectures_removed">تم حذف المحاضرات</string>
+    <string name="course_deleted">تم حذف المقرر</string>
+    <string name="system">تلقائي</string>
+    <string name="dark">الداكن</string>
+    <string name="light">فاتح</string>
+    <string name="cancel">إلغاء</string>
+    <string name="accept">موافق</string>
+    <string name="default_theme">التنسيق الإفتراضي</string>
+    <string name="change_theme">تغير التنسيق</string>
+    <string name="dynamic_colors">ألوان من الخلفية (أندرويد 12+)</string>
+    <string name="lectures_per_day">محاضرات في اليوم</string>
+    <string name="lecture_duration">زمن المحاضرة</string>
+    <string name="start_time">بداية أول محاضرة</string>
+    <string name="lecture_duration_in_minutes">زمن المحاضرة بالدقيقة</string>
+    <string name="nothing_to_show">لا يوجد شيء للعرض</string>
+</resources>

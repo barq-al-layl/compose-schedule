@@ -1,6 +1,5 @@
 package com.ba.schedule.ui.home.exams
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -28,7 +27,7 @@ import com.ba.schedule.R
 import com.ba.schedule.model.ExamType
 import com.ba.schedule.ui.component.TableCell
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EventsScreen(
     viewModel: ExamsViewModel = hiltViewModel(),

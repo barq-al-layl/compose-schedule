@@ -22,7 +22,7 @@ class SettingsRepository @Inject constructor(
     }
 
     fun getUseDynamicColorStream(): Flow<Boolean> {
-        return dataStore.useDynamicColors.map { it ?: false }
+        return dataStore.useDynamicColors.map { it ?: true }
     }
 
     suspend fun setUseDynamicColor(value: Boolean) {

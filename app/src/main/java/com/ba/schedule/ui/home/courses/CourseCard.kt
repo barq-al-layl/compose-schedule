@@ -1,4 +1,4 @@
-package com.ba.schedule.ui.component
+package com.ba.schedule.ui.home.courses
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.*
