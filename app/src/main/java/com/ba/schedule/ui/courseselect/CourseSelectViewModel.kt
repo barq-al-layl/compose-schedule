@@ -7,7 +7,7 @@ import com.ba.schedule.data.repository.CoursesRepository
 import com.ba.schedule.data.repository.LecturesRepository
 import com.ba.schedule.model.Course
 import com.ba.schedule.model.Lecture
-import com.ba.schedule.ui.navigation.MainDestination
+import com.ba.schedule.ui.navArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -29,8 +29,14 @@ class CourseSelectViewModel @Inject constructor(
     private val _selectedItem = MutableStateFlow<Course?>(null)
     val selectedCourse = _selectedItem.asStateFlow()
 
-    private val day: Int = savedStateHandle[MainDestination.kDay]!!
-    private val time: Int = savedStateHandle[MainDestination.kTime]!!
+    private val day: Int
+    private val time: Int
+
+    init {
+        val args: CourseSelectScreenNavArgs = savedStateHandle.navArgs()
+        day = args.day
+        time = args.time
+    }
 
     fun onItemSelect(item: Course) {
         _selectedItem.update {

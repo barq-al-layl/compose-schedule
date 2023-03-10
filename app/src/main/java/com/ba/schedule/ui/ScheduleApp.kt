@@ -1,5 +1,6 @@
 package com.ba.schedule.ui
 
+import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
@@ -12,98 +13,111 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.CalendarMonth
+import androidx.compose.material.icons.rounded.School
+import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.material.icons.rounded.TableView
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
-import com.ba.schedule.ui.courseselect.CourseSelectScreen
-import com.ba.schedule.ui.editcourse.EditCourseScreen
-import com.ba.schedule.ui.navigation.HomeSection
-import com.ba.schedule.ui.navigation.MainDestination
-import com.ba.schedule.ui.navigation.homeSectionNavGraph
+import androidx.navigation.compose.rememberNavController
+import com.ba.schedule.R
+import com.ba.schedule.ui.destinations.*
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.ramcosta.composedestinations.DestinationsNavHost
+import com.ramcosta.composedestinations.navigation.navigate
+import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
 
 @Composable
 fun ScheduleApp() {
+    val navController = rememberNavController()
     val appState = rememberScheduleAppState()
     val systemUiController = rememberSystemUiController()
     Scaffold(
         bottomBar = {
-            val showBottomBar = appState.shouldShowBottomBar
+            val currentDestination by navController.appCurrentDestinationAsState()
+            val bottomBarDirections = HomeSection.values().map { it.direction }
+            val showBottomBar = bottomBarDirections.any { it == currentDestination }
             val backgroundColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)
             val systemBarColor = animateColorAsState(
                 targetValue = if (showBottomBar) backgroundColor
                 else MaterialTheme.colorScheme.background,
-                animationSpec = spring(
-                    stiffness = Spring.StiffnessMedium,
-                )
+                animationSpec = spring(stiffness = Spring.StiffnessMedium)
             )
             systemUiController.setNavigationBarColor(systemBarColor.value)
             AnimatedVisibility(
-                visible = appState.shouldShowBottomBar,
+                visible = showBottomBar,
                 enter = slideInVertically(tween()) { it },
                 exit = slideOutVertically(tween()) { it },
             ) {
                 BottomBar(
                     backgroundColor = backgroundColor,
-                    tabs = appState.bottomBarTabs,
-                    currentRoute = appState.currentRoute!!,
-                    navigateToRoute = appState::navigateToBottomBarRoute,
-                )
+                    currentDestination = currentDestination,
+                ) {
+                    if (it != currentDestination) {
+                        navController.navigate(it) {
+                            launchSingleTop = true
+                            restoreState = true
+                            popUpTo(0) { saveState = true }
+                        }
+                    }
+                }
             }
         },
         snackbarHost = {
             SnackbarHost(hostState = appState.snackbarHostState)
         }
     ) { innerPadding ->
-        NavHost(
-            navController = appState.navController,
-            startDestination = MainDestination.Home,
-            modifier = Modifier.padding(innerPadding),
-        ) {
-            homeSectionNavGraph(appState)
-            composable(
-                route = "${MainDestination.SelectCourse}/{${MainDestination.kDay}}/{${MainDestination.kTime}}",
-                arguments = listOf(
-                    navArgument(MainDestination.kDay) {
-                        type = NavType.IntType
-                    },
-                    navArgument(MainDestination.kTime) {
-                        type = NavType.IntType
-                    },
-                ),
-            ) {
-                CourseSelectScreen(navigateBack = appState::upPress)
-            }
-            composable(
-                route = "${MainDestination.AddCourse}/{${MainDestination.kCourseId}}",
-                arguments = listOf(
-                    navArgument(MainDestination.kCourseId) {
-                        type = NavType.IntType
-                        defaultValue = -1
-                    },
-                ),
-            ) {
-                EditCourseScreen(navigateBack = appState::upPress)
-            }
-        }
+        DestinationsNavHost(
+            navGraph = NavGraphs.root,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
+            navController = navController,
+        )
     }
+}
+
+enum class HomeSection(
+    val direction: DirectionDestinationSpec,
+    val icon: ImageVector,
+    @StringRes val label: Int,
+) {
+    Lectures(
+        direction = LecturesScreenDestination,
+        icon = Icons.Rounded.TableView,
+        label = R.string.lectures,
+    ),
+    Courses(
+        direction = CoursesScreenDestination,
+        icon = Icons.Rounded.School,
+        label = R.string.courses,
+    ),
+    Events(
+        direction = EventsScreenDestination,
+        icon = Icons.Rounded.CalendarMonth,
+        label = R.string.exams,
+    ),
+    Settings(
+        direction = SettingsScreenDestination,
+        icon = Icons.Rounded.Settings,
+        label = R.string.settings,
+    ),
 }
 
 @Composable
 private fun BottomBar(
     backgroundColor: Color,
-    tabs: Array<HomeSection>,
-    currentRoute: String,
-    navigateToRoute: (String) -> Unit,
+    currentDestination: Destination?,
+    onItemClick: (DirectionDestinationSpec) -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -113,13 +127,12 @@ private fun BottomBar(
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        tabs.forEach {
+        HomeSection.values().forEach {
+            val isSelected = it.direction == currentDestination
             CustomBottomBarItem(
-                selected = it.route == currentRoute,
+                selected = isSelected,
                 item = it,
-            ) {
-                navigateToRoute(it.route)
-            }
+            ) { onItemClick(it.direction) }
         }
     }
 }

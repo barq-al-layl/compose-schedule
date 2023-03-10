@@ -22,13 +22,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ba.schedule.R
-import com.ba.schedule.ui.component.AddCourseTextField
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+
+data class EditCourseScreenNavArgs(val id: Int = -1)
 
 @OptIn(ExperimentalMaterial3Api::class)
+@Destination(navArgsDelegate = EditCourseScreenNavArgs::class)
 @Composable
 fun EditCourseScreen(
+    navigator: DestinationsNavigator,
     viewModel: EditCourseViewModel = hiltViewModel(),
-    navigateBack: () -> Unit,
 ) {
     val courseName by viewModel.courseName.collectAsState()
     val final by viewModel.final.collectAsState()
@@ -41,7 +45,7 @@ fun EditCourseScreen(
             TopAppBar(
                 title = { Text(text = stringResource(id = R.string.add_course)) },
                 navigationIcon = {
-                    IconButton(onClick = navigateBack) {
+                    IconButton(onClick = navigator::navigateUp) {
                         Icon(
                             imageVector = Icons.Rounded.ArrowBackIosNew,
                             contentDescription = null,
@@ -53,7 +57,7 @@ fun EditCourseScreen(
                     FilledIconButton(
                         onClick = {
                             val res = viewModel.onEditCourse()
-                            if (res) navigateBack()
+                            if (res) navigator.navigateUp()
                         },
                         modifier = Modifier.padding(4.dp),
                         shape = MaterialTheme.shapes.large,

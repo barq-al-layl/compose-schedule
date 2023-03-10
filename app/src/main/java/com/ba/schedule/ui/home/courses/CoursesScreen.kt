@@ -26,12 +26,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ba.schedule.R
+import com.ba.schedule.ui.destinations.EditCourseScreenDestination
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@Destination
 @Composable
 fun CoursesScreen(
+    navigator: DestinationsNavigator,
     viewModel: CoursesViewModel = hiltViewModel(),
-    navigateToAddCourse: (Int) -> Unit,
 ) {
     val showSearch by viewModel.showSearch.collectAsState()
     val searchValue by viewModel.searchString.collectAsState()
@@ -90,7 +94,7 @@ fun CoursesScreen(
             }
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { navigateToAddCourse(-1) }) {
+            FloatingActionButton(onClick = { navigator.navigate(EditCourseScreenDestination()) }) {
                 Icon(
                     imageVector = Icons.Rounded.Add,
                     contentDescription = null,
@@ -123,7 +127,7 @@ fun CoursesScreen(
                         width = screenWidth,
                         expanded = expandedItem == it.id,
                         onClick = { viewModel.onExpandItem(it.id!!) },
-                        onEdit = { navigateToAddCourse(it.id!!) },
+                        onEdit = { navigator.navigate(EditCourseScreenDestination(it.id!!)) },
                         onDelete = { viewModel.onDeleteCourse(it) },
                         modifier = Modifier.animateItemPlacement()
                     )

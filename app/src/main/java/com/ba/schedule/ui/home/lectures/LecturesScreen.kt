@@ -25,12 +25,18 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ba.schedule.R
 import com.ba.schedule.ui.component.TableCell
+import com.ba.schedule.ui.destinations.CourseSelectScreenDestination
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootNavGraph
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
+@RootNavGraph(start = true)
+@Destination
 @Composable
 fun LecturesScreen(
+    navigator: DestinationsNavigator,
     viewModel: LecturesViewModel = hiltViewModel(),
-    onLectureClick: (Int, Int) -> Unit,
 ) {
 
     val tablePadding = 6.dp
@@ -167,8 +173,12 @@ fun LecturesScreen(
                                 enabled = !isLocked,
                                 isSelected = isSelected,
                                 onClick = {
-                                    if (isRemoveVisible) viewModel.onSelectLecture(lecture)
-                                    else onLectureClick(day, timeIndex)
+                                    if (isRemoveVisible)
+                                        viewModel.onSelectLecture(lecture)
+                                    else
+                                        navigator.navigate(
+                                            CourseSelectScreenDestination(day, timeIndex),
+                                        )
                                 },
                                 onLongClick = { viewModel.onSelectLecture(lecture) },
                             )

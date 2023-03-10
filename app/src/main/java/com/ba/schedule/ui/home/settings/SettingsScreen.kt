@@ -32,12 +32,16 @@ import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ba.schedule.R
 import com.ba.schedule.model.ThemeMode
+import com.ramcosta.composedestinations.annotation.Destination
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
+@Destination
 @Composable
-fun SettingsScreen(viewModel: SettingViewModel = hiltViewModel()) {
+fun SettingsScreen(
+    viewModel: SettingViewModel = hiltViewModel(),
+) {
     val themeMode by viewModel.themeMode.collectAsState()
     val useDynamicColors by viewModel.useDynamicColors.collectAsState()
     val lecturesPerDay by viewModel.totalLectures.collectAsState()
