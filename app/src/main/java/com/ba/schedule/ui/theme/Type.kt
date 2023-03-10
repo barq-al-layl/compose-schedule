@@ -54,4 +54,3 @@ val Typography = Typography(
     labelMedium = BaseTypography.labelMedium.copy(fontFamily = Roboto),
     labelSmall = BaseTypography.labelSmall.copy(fontFamily = Roboto),
 )
-
