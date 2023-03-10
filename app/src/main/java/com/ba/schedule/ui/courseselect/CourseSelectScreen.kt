@@ -1,24 +1,32 @@
 package com.ba.schedule.ui.courseselect
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.rounded.ArrowBackIosNew
 import androidx.compose.material.icons.rounded.Done
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -36,6 +44,8 @@ fun CourseSelectScreen(
     navigator: DestinationsNavigator,
     viewModel: CourseSelectViewModel = hiltViewModel(),
 ) {
+    val showSearch by viewModel.showSearch.collectAsState()
+    val searchValue by viewModel.searchString.collectAsState()
     val courses by viewModel.courses.collectAsState()
     val selectedCourse by viewModel.selectedCourse.collectAsState()
     val cardWith = LocalConfiguration.current.screenWidthDp.dp
@@ -50,16 +60,56 @@ fun CourseSelectScreen(
                         fontWeight = FontWeight.W500,
                     )
                 },
-                actions = {
+                navigationIcon = {
                     IconButton(onClick = navigator::navigateUp) {
                         Icon(
-                            imageVector = Icons.Rounded.Close,
+                            imageVector = Icons.Rounded.ArrowBackIosNew,
+                            contentDescription = null,
+                            modifier = Modifier.size(32.dp),
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(onClick = viewModel::onShowSearchChange) {
+                        Icon(
+                            imageVector = Icons.Rounded.Search,
                             contentDescription = null,
                             modifier = Modifier.size(32.dp),
                         )
                     }
                 }
             )
+            AnimatedVisibility(
+                visible = showSearch,
+                enter = slideInVertically { -it },
+                exit = slideOutVertically { -it },
+            ) {
+                val focusRequester = remember { FocusRequester() }
+                TextField(
+                    value = searchValue,
+                    onValueChange = viewModel::onSearchValueChange,
+                    modifier = Modifier
+                        .focusRequester(focusRequester)
+                        .height(64.dp)
+                        .fillMaxWidth(),
+                    singleLine = true,
+                    placeholder = { Text(text = stringResource(id = R.string.search)) },
+                    trailingIcon = {
+                        IconButton(onClick = viewModel::onShowSearchChange) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = null,
+                                modifier = Modifier.size(28.dp),
+                            )
+                        }
+                    },
+                    textStyle = TextStyle(fontSize = 20.sp),
+                    keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words),
+                )
+                LaunchedEffect(Unit) {
+                    focusRequester.requestFocus()
+                }
+            }
         }
     ) { innerPadding ->
         if (courses.isEmpty()) {

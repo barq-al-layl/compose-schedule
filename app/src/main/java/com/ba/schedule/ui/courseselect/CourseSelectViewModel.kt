@@ -20,11 +20,20 @@ class CourseSelectViewModel @Inject constructor(
     private val lecturesRepository: LecturesRepository,
 ) : ViewModel() {
 
-    val courses = coursesRepository.getAll().stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = emptyList(),
-    )
+    private val _showSearch = MutableStateFlow(false)
+    val showSearch = _showSearch.asStateFlow()
+
+    private val _searchString = MutableStateFlow("")
+    val searchString = _searchString.asStateFlow()
+
+    val courses = coursesRepository.getAll()
+        .combine(searchString) { courses, search ->
+            courses.filter { it.name.contains(search) }
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList(),
+        )
 
     private val _selectedItem = MutableStateFlow<Course?>(null)
     val selectedCourse = _selectedItem.asStateFlow()
@@ -36,6 +45,11 @@ class CourseSelectViewModel @Inject constructor(
         val args: CourseSelectScreenNavArgs = savedStateHandle.navArgs()
         day = args.day
         time = args.time
+        showSearch.onEach { visible ->
+            if (!visible) {
+                _searchString.update { "" }
+            }
+        }.launchIn(viewModelScope)
     }
 
     fun onItemSelect(item: Course) {
@@ -55,4 +69,13 @@ class CourseSelectViewModel @Inject constructor(
             lecturesRepository.add(lecture)
         }
     }
+
+    fun onSearchValueChange(value: String) {
+        _searchString.update { value }
+    }
+
+    fun onShowSearchChange() {
+        _showSearch.update { !it }
+    }
+
 }
