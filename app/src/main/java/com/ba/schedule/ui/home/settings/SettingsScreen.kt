@@ -1,6 +1,4 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
-    ExperimentalMaterial3Api::class
-)
+@file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.ba.schedule.ui.home.settings
 
@@ -86,7 +84,11 @@ fun SettingsScreen(viewModel: SettingViewModel = hiltViewModel()) {
                 }
             }
             ElevatedCard(
+                onClick = {
+                    viewModel.onUseDynamicColorChanged(!useDynamicColors)
+                },
                 shape = MaterialTheme.shapes.medium,
+                enabled = viewModel.supportDynamicColor,
             ) {
                 Row(
                     modifier = Modifier
@@ -104,6 +106,7 @@ fun SettingsScreen(viewModel: SettingViewModel = hiltViewModel()) {
                 }
             }
             ElevatedCard(
+                onClick = { isLecturesPerDayExpanded = true },
                 shape = MaterialTheme.shapes.medium,
             ) {
                 Row(
@@ -146,6 +149,7 @@ fun SettingsScreen(viewModel: SettingViewModel = hiltViewModel()) {
                 }
             }
             ElevatedCard(
+                onClick = { isTimePickerDialogVisible = true },
                 shape = MaterialTheme.shapes.medium,
             ) {
                 Row(
@@ -166,7 +170,10 @@ fun SettingsScreen(viewModel: SettingViewModel = hiltViewModel()) {
                     }
                 }
             }
-            ElevatedCard(shape = MaterialTheme.shapes.medium) {
+            ElevatedCard(
+                onClick = { isLectureDurationDialogVisible = true },
+                shape = MaterialTheme.shapes.medium,
+            ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()

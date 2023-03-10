@@ -1,6 +1,5 @@
 package com.ba.schedule.ui.home.settings
 
-import android.annotation.SuppressLint
 import android.os.Build
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -20,7 +19,6 @@ import kotlin.time.Duration.Companion.minutes
 class SettingViewModel @Inject constructor(
     private val repository: SettingsRepository,
 ) : ViewModel() {
-    @SuppressLint("ObsoleteSdkInt")
     val supportDynamicColor = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 
     val themeMode = repository.getThemeModeStream().toStateFlow(ThemeMode.Dark)
