@@ -1,4 +1,4 @@
-package com.ba.schedule.ui.component
+package com.ba.schedule.ui.editcourse
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.border
@@ -22,8 +22,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ba.schedule.R
-import com.ba.schedule.ui.editcourse.EditCourseTextFieldEvent
-import com.ba.schedule.ui.editcourse.EditCourseTextFieldState
 
 @Composable
 fun AddCourseTextField(

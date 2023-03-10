@@ -26,8 +26,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ba.schedule.R
 import com.ba.schedule.model.ExamType
 import com.ba.schedule.ui.component.TableCell
+import com.ramcosta.composedestinations.annotation.Destination
 
 @OptIn(ExperimentalMaterial3Api::class)
+@Destination
 @Composable
 fun EventsScreen(
     viewModel: ExamsViewModel = hiltViewModel(),

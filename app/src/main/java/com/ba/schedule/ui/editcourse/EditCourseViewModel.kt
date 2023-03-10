@@ -8,7 +8,7 @@ import com.ba.schedule.data.repository.ExamsRepository
 import com.ba.schedule.model.Course
 import com.ba.schedule.model.Exam
 import com.ba.schedule.model.ExamType
-import com.ba.schedule.ui.navigation.MainDestination
+import com.ba.schedule.ui.destinations.EditCourseScreenDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,7 +35,7 @@ class EditCourseViewModel @Inject constructor(
     private val _midterm = MutableStateFlow(EditCourseTextFieldState())
     val midterm = _midterm.asStateFlow()
 
-    private val courseId: Int = savedStateHandle[MainDestination.kCourseId]!!
+    private val courseId: Int = EditCourseScreenDestination.argsFrom(savedStateHandle).id
 
     private var finalExam: Exam? = null
     private var midtermExam: Exam? = null

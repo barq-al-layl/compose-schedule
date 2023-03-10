@@ -24,12 +24,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ba.schedule.R
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+
+data class CourseSelectScreenNavArgs(val day: Int, val time: Int)
 
 @OptIn(ExperimentalMaterial3Api::class)
+@Destination(navArgsDelegate = CourseSelectScreenNavArgs::class)
 @Composable
 fun CourseSelectScreen(
+    navigator: DestinationsNavigator,
     viewModel: CourseSelectViewModel = hiltViewModel(),
-    navigateBack: () -> Unit,
 ) {
     val courses by viewModel.courses.collectAsState()
     val selectedCourse by viewModel.selectedCourse.collectAsState()
@@ -46,7 +51,7 @@ fun CourseSelectScreen(
                     )
                 },
                 actions = {
-                    IconButton(onClick = navigateBack) {
+                    IconButton(onClick = navigator::navigateUp) {
                         Icon(
                             imageVector = Icons.Rounded.Close,
                             contentDescription = null,
@@ -96,7 +101,7 @@ fun CourseSelectScreen(
                         FilledIconButton(
                             onClick = {
                                 viewModel.onAddLecture()
-                                navigateBack()
+                                navigator.navigateUp()
                             },
                             modifier = Modifier
                                 .weight(1f)
