@@ -1,5 +1,7 @@
 package com.ba.schedule.data.repository
 
+import android.annotation.SuppressLint
+import android.os.Build
 import com.ba.schedule.data.database.ScheduleDataStore
 import com.ba.schedule.model.ThemeMode
 import kotlinx.coroutines.flow.Flow
@@ -13,6 +15,9 @@ import kotlin.time.DurationUnit
 class SettingsRepository @Inject constructor(
     private val dataStore: ScheduleDataStore,
 ) {
+    @SuppressLint("ObsoleteSdkInt")
+    val supportDynamicColor = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+
     fun getThemeModeStream(): Flow<ThemeMode> {
         return dataStore.themeMode.map { ThemeMode.values()[it ?: 0] }
     }
@@ -22,7 +27,7 @@ class SettingsRepository @Inject constructor(
     }
 
     fun getUseDynamicColorStream(): Flow<Boolean> {
-        return dataStore.useDynamicColors.map { it ?: true }
+        return dataStore.useDynamicColors.map { it ?: supportDynamicColor }
     }
 
     suspend fun setUseDynamicColor(value: Boolean) {

@@ -124,7 +124,7 @@ private fun BottomBar(
             .fillMaxWidth()
             .background(backgroundColor)
             .padding(14.dp),
-        horizontalArrangement = Arrangement.SpaceAround,
+        horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         HomeSection.values().forEach {

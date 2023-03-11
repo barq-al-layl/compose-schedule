@@ -1,6 +1,5 @@
 package com.ba.schedule.ui.home.settings
 
-import android.os.Build
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ba.schedule.data.repository.SettingsRepository
@@ -19,7 +18,7 @@ import kotlin.time.Duration.Companion.minutes
 class SettingViewModel @Inject constructor(
     private val repository: SettingsRepository,
 ) : ViewModel() {
-    val supportDynamicColor = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+    val supportDynamicColor = repository.supportDynamicColor
 
     val themeMode = repository.getThemeModeStream().toStateFlow(ThemeMode.Dark)
     val useDynamicColors = repository.getUseDynamicColorStream()
